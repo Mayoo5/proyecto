@@ -145,16 +145,10 @@ def check_login():
 
 @app.route('/')
 def index():
-    """API disponible"""
-    return jsonify({
-        'message': 'CGI Autos API',
-        'version': '1.0',
-        'endpoints': {
-            'autos': '/api/autos',
-            'login': '/login',
-            'clientes': '/api/clientes'
-        }
-    })
+    """Redirige al login"""
+    if session.get('logged_in'):
+        return render_template('admin.html')
+    return redirect(url_for('login'))
 
 @app.route('/admin')
 def admin_page():
