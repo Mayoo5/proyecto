@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CGI Autos - Líderes en venta de autos nuevos y usados certificados. Experiencia, confianza y financiamiento flexible. ¡Encuentra tu auto ideal hoy!">
+    <meta name="keywords" content="autos nuevos, autos usados, venta de autos, agencia de carros, vehículos nuevos y usados, financiamiento auto, CGI Autos">
+    <meta name="author" content="CGI Autos">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#dc2626">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cgiautos.com/">
+    <meta property="og:title" content="CGI Autos - Venta de Autos Nuevos y Usados Certificados">
+    <meta property="og:description" content="Encuentra tu próximo auto con nosotros. Amplio inventario, financiamiento fácil y servicio de calidad premium.">
+    <meta property="og:image" content="https://cgiautos.com/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://cgiautos.com/">
+    <meta property="twitter:title" content="CGI Autos - Venta de Autos Nuevos y Usados">
+    <meta property="twitter:description" content="Experiencia y confianza en venta de autos nuevos y usados.">
+    
+    <title>CGI Autos - Autos Nuevos y Usados Certificados | Financiamiento Disponible</title>
+    
+    <!-- Preconnect para optimización -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload recursos críticos -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" as="style">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-modern.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <!-- Header y Navegación -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container navbar-flex">
+                <div class="logo">
+                    <img src="logo-cgi-autos.png" alt="CGI Autos Logo" class="logo-img">
+                    <span>CGI Autos</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#inventario">Inventario</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#acerca">Acerca de</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="https://www.instagram.com/cgiautos/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                </ul>
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero" id="inicio">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-modern">
+                <div class="hero-text-container">
+                    <div class="hero-badge-modern">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Confianza y Calidad</span>
+                    </div>
+                    <h1 class="hero-title-modern hero-title-center">
+                        Encuentra el Auto de 
+                        <span class="highlight-text">Tus Sueños</span>
+                    </h1>
+                    <p class="hero-description-modern hero-description-center">
+                        En CGI Autos te ofrecemos la mejor selección de vehículos, 
+                        financiamiento a tu medida y atención personalizada para que encuentres 
+                        exactamente lo que buscas.
+                    </p>
+                    
+                    <div class="hero-features hide-mobile">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Vehículos Certificados</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Financiamiento Flexible</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Atención Personalizada</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-buttons-modern hide-mobile">
+                        <a href="#inventario" class="btn-modern btn-primary-modern">
+                            <i class="fas fa-car"></i>
+                            <span>Ver Inventario</span>
+                        </a>
+                        <button class="btn-modern btn-whatsapp-modern" onclick="mostrarOpcionesWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Consultar por WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-stats-modern hide-mobile">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon">
+                            <i class="fas fa-car-side"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number-modern">+5000</div>
+                            <div class="stat-label-modern">Vehículos Vendidos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-modern" onclick="openClientsModal()" style="cursor: pointer;">
+                        <div class="stat-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number-modern">95%</div>
+                            <div class="stat-label-modern">Clientes Satisfechos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-modern">
+                        <div class="stat-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-number-modern">20+</div>
+                            <div class="stat-label-modern">Años de Experiencia</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <!-- Sección de Búsqueda Avanzada Profesional -->
+    <section class="search-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Búsqueda Inteligente de Vehículos</h2>
+                <p class="section-subtitle">Sistema avanzado de filtros para encontrar el vehículo perfecto según tus especificaciones</p>
+            </div>
+            
+            <!-- Barra de búsqueda rápida -->
+            <div class="quick-search-bar glass-card">
+                <i class="fas fa-search"></i>
+                <input type="text" id="quick-search" placeholder="Buscar por marca, modelo, año o características..." class="quick-search-input">
+                <button type="button" class="btn-filter-toggle" onclick="toggleAdvancedFilters()">
+                    <i class="fas fa-sliders-h"></i>
+                    Filtros Avanzados
+                </button>
+            </div>
+
+            <!-- Filtros avanzados expandibles -->
+            <div id="advanced-filters" class="advanced-filters glass-card" style="display: none;">
+                <div class="filters-header">
+                    <h3><i class="fas fa-filter"></i> Filtros Avanzados</h3>
+                    <button type="button" class="btn-clear-filters" onclick="limpiarFiltros()">
+                        <i class="fas fa-times-circle"></i> Limpiar Filtros
+                    </button>
+                </div>
+                
+                <form id="search-form" class="search-form-grid">
+                    <!-- Categoría vehicular -->
+                    <div class="filter-section full-width">
+                        <h4><i class="fas fa-th-large"></i> Categoría del Vehículo</h4>
+                        <div class="category-buttons">
+                            <button type="button" class="category-btn" data-category="suv">
+                                SUV
+                            </button>
+                            <button type="button" class="category-btn" data-category="pickup">
+                                Pick Up
+                            </button>
+                            <button type="button" class="category-btn" data-category="auto">
+                                Auto
+                            </button>
+                            <button type="button" class="category-btn" data-category="utilitario">
+                                Utilitario
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Marca y Modelo -->
+                    <div class="form-group">
+                        <label for="marca">
+                            <i class="fas fa-trademark"></i> Marca
+                        </label>
+                        <select id="marca" name="marca" class="custom-select">
+                            <option value="">Todas las marcas</option>
+                            <option value="audi">Audi</option>
+                            <option value="bmw">BMW</option>
+                            <option value="chevrolet">Chevrolet</option>
+                            <option value="toyota">Toyota</option>
+                            <option value="honda">Honda</option>
+                            <option value="ford">Ford</option>
+                            <option value="volkswagen">Volkswagen</option>
+                            <option value="renault">Renault</option>
+                            <option value="peugeot">Peugeot</option>
+                            <option value="fiat">Fiat</option>
+                            <option value="citroen">Citroën</option>
+                            <option value="mercedes-benz">Mercedes Benz</option>
+                            <option value="nissan">Nissan</option>
+                            <option value="hyundai">Hyundai</option>
+                            <option value="kia">Kia</option>
+                            <option value="mazda">Mazda</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modelo">
+                            <i class="fas fa-car-side"></i> Modelo
+                        </label>
+                        <input type="text" id="modelo" name="modelo" placeholder="Buscar modelo..." class="custom-input">
+                    </div>
+
+                    <!-- Rango de Año -->
+                    <div class="form-group">
+                        <label for="ano-min">
+                            <i class="fas fa-calendar-alt"></i> Año Desde
+                        </label>
+                        <select id="ano-min" name="ano-min" class="custom-select">
+                            <option value="">Desde</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                            <option value="2010">2010 o anterior</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ano-max">
+                            <i class="fas fa-calendar-check"></i> Año Hasta
+                        </label>
+                        <select id="ano-max" name="ano-max" class="custom-select">
+                            <option value="">Hasta</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                        </select>
+                    </div>
+
+                    <!-- Rango de Precio -->
+                    <div class="form-group">
+                        <label for="precio-min">
+                            <i class="fas fa-dollar-sign"></i> Precio Mínimo
+                        </label>
+                        <input type="number" id="precio-min" name="precio-min" placeholder="Desde $" class="custom-input" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precio-max">
+                            <i class="fas fa-dollar-sign"></i> Precio Máximo
+                        </label>
+                        <input type="number" id="precio-max" name="precio-max" placeholder="Hasta $" class="custom-input" min="0">
+                    </div>
+
+                    <!-- Kilometraje -->
+                    <div class="form-group">
+                        <label for="km-max">
+                            <i class="fas fa-tachometer-alt"></i> Kilometraje Máximo
+                        </label>
+                        <select id="km-max" name="km-max" class="custom-select">
+                            <option value="">Sin límite</option>
+                            <option value="10000">Hasta 10,000 km</option>
+                            <option value="30000">Hasta 30,000 km</option>
+                            <option value="50000">Hasta 50,000 km</option>
+                            <option value="75000">Hasta 75,000 km</option>
+                            <option value="100000">Hasta 100,000 km</option>
+                            <option value="150000">Hasta 150,000 km</option>
+                        </select>
+                    </div>
+
+                    <!-- Transmisión -->
+                    <div class="form-group">
+                        <label for="transmision">
+                            <i class="fas fa-exchange-alt"></i> Transmisión
+                        </label>
+                        <select id="transmision" name="transmision" class="custom-select">
+                            <option value="">Todas</option>
+                            <option value="manual">Manual</option>
+                            <option value="automatica">Automática</option>
+                        </select>
+                    </div>
+
+                    <!-- Combustible -->
+                    <div class="form-group">
+                        <label for="combustible">
+                            <i class="fas fa-gas-pump"></i> Combustible
+                        </label>
+                        <select id="combustible" name="combustible" class="custom-select">
+                            <option value="">Todos</option>
+                            <option value="gasolina">Gasolina</option>
+                            <option value="diesel">Diésel</option>
+                            <option value="hibrido">Híbrido</option>
+                            <option value="electrico">Eléctrico</option>
+                            <option value="gnc">GNC</option>
+                        </select>
+                    </div>
+
+                    <!-- Color -->
+                    <div class="form-group">
+                        <label for="color">
+                            <i class="fas fa-palette"></i> Color
+                        </label>
+                        <select id="color" name="color" class="custom-select">
+                            <option value="">Todos los colores</option>
+                            <option value="blanco">Blanco</option>
+                            <option value="negro">Negro</option>
+                            <option value="gris">Gris</option>
+                            <option value="plata">Plata</option>
+                            <option value="rojo">Rojo</option>
+                            <option value="azul">Azul</option>
+                            <option value="verde">Verde</option>
+                            <option value="amarillo">Amarillo</option>
+                            <option value="beige">Beige</option>
+                        </select>
+                    </div>
+
+                    <!-- Condición -->
+                    <div class="form-group">
+                        <label for="condicion">
+                            <i class="fas fa-star"></i> Condición
+                        </label>
+                        <select id="condicion" name="condicion" class="custom-select">
+                            <option value="">Todas</option>
+                            <option value="nuevo">0 km / Nuevo</option>
+                            <option value="seminuevo">Semi-nuevo</option>
+                            <option value="usado">Usado</option>
+                        </select>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="filter-actions full-width">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Buscar Vehículos</span>
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="limpiarFiltros()">
+                            <i class="fas fa-redo"></i>
+                            <span>Restablecer</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Contador de resultados y ordenamiento -->
+            <div class="results-toolbar">
+                <div class="results-count">
+                    <span id="results-count">0 vehículos encontrados</span>
+                </div>
+                <div class="sort-options">
+                    <label><i class="fas fa-sort"></i> Ordenar por:</label>
+                    <select id="sort-by" class="custom-select-small">
+                        <option value="destacado">Destacados</option>
+                        <option value="precio-asc">Precio: Menor a Mayor</option>
+                        <option value="precio-desc">Precio: Mayor a Menor</option>
+                        <option value="ano-desc">Año: Más Nuevo</option>
+                        <option value="ano-asc">Año: Más Antiguo</option>
+                        <option value="km-asc">Kilometraje: Menor</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Inventario -->
+    <section class="inventario" id="inventario">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Nuestro Inventario</span>
+                <h2 class="section-title">Vehículos Disponibles</h2>
+                <p class="section-subtitle">Todos nuestros vehículos están revisados y listos para su nuevo dueño</p>
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">
+                    <i class="fas fa-th"></i>
+                    Todos
+                </button>
+                <button class="filter-tab" data-filter="destacado">
+                    <i class="fas fa-star"></i>
+                    Destacado
+                </button>
+                <button class="filter-tab" data-filter="oferta">
+                    <i class="fas fa-tag"></i>
+                    En Oferta
+                </button>
+                <button class="filter-tab" data-filter="nuevo">
+                    <i class="fas fa-certificate"></i>
+                    Recién Llegado
+                </button>
+                <button class="filter-tab" data-filter="cero_km">
+                    <i class="fas fa-car"></i>
+                    0 KM
+                </button>
+            </div>
+            <div class="autos-grid" id="autos-grid">
+                <!-- Los autos se cargarán dinámicamente aquí -->
+            </div>
+            <div class="load-more-container">
+                <button class="load-more-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Cargar Más Vehículos</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para detalles del auto -->
+    <div id="modal-auto" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Modal para opciones de WhatsApp -->
+    <div id="modal-whatsapp" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close" onclick="cerrarModalWhatsApp()">&times;</span>
+            <div style="padding: 2rem;">
+                <h2 style="text-align: center; margin-bottom: 1.5rem; color: #1e3a8a;">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i> 
+                    Selecciona un Asesor
+                </h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">Elige con quién deseas comunicarte</p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="https://wa.me/543533431466" target="_blank" class="whatsapp-option">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <strong>Jorge</strong>
+                            <span>+54 3533 431466</span>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/543533431464" target="_blank" class="whatsapp-option">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <strong>Ignacio</strong>
+                            <span>+54 3533 431464</span>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/543533445333" target="_blank" class="whatsapp-option">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <strong>Cristian</strong>
+                            <span>+54 3533 445333</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Servicios Moderna -->
+    <section class="servicios-modern" id="servicios">
+        <div class="container">
+            <div class="section-header-modern">
+                <div class="badge-modern">¿POR QUÉ ELEGIRNOS?</div>
+                <h2 class="title-modern">Nuestros Servicios</h2>
+                <p class="subtitle-modern">Ofrecemos una experiencia completa de compra</p>
+            </div>
+            
+            <div class="services-grid-modern">
+                <!-- Servicio 1: Financiamiento -->
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="service-content-modern">
+                        <h3 class="service-title-modern">Financiamiento Flexible</h3>
+                        <p class="service-description-modern">
+                            Financiación competitiva con planes de pago a la medida de su presupuesto.
+                        </p>
+                        <a href="#contacto" class="service-link-modern">
+                            Más información
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+
+                <!-- Servicio 2: Valuación -->
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="service-content-modern">
+                        <h3 class="service-title-modern">Valuación y Parte de Pago</h3>
+                        <p class="service-description-modern">
+                            Recibimos su usado como permuta. Garantizamos una valuación justa, transparente y competitiva.
+                        </p>
+                        <a href="#contacto" class="service-link-modern">
+                            Más información
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+
+                <!-- Servicio 3: Asesoría -->
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="service-content-modern">
+                        <h3 class="service-title-modern">Asesoría Real</h3>
+                        <p class="service-description-modern">
+                            Garantizamos un proceso de compra guiado y sin presiones. Nuestro objetivo es encontrar el auto que se ajuste a sus necesidades.
+                        </p>
+                        <a href="#contacto" class="service-link-modern">
+                            Más información
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Acerca de Nosotros -->
+    <section class="acerca-nosotros-modern" id="acerca">
+        <div class="container">
+            <div class="about-header-modern">
+                <span class="section-label">NUESTRA HISTORIA</span>
+                <h2 class="section-title-about">Acerca de Nosotros</h2>
+            </div>
+            
+            <div class="about-layout-grid">
+                <div class="about-text-section">
+                    <h3 class="about-main-title">Más de 20 años de trayectoria en el mercado automotriz</h3>
+                    <p class="about-text"></p>CGI Grupo es una empresa especializada en la compra, venta y financiación de autos usados y 0Km. Nuestro lema, "Acelera tus sueños", refleja nuestro enfoque en ofrecer transacciones rápidas y confiables.</p>
+                    <p class="about-text">El objetivo de la empresa es ser un medio para realizar un intercambio (por efectivo o entrega de menor) de vehículos. Esto se ofrece con excelente atención, amplia disponibilidad y fácil financiación.</p>
+                    <p class="about-text">MISIÓN: Garantizar valor y rapidez a las transacciones para una experiencia satisfactoria integrada a la expansión de mercado.
+                        VISIÓN: Ser la empresa automotriz líder en la región por nuestra confiabilidad, rapidez y variedad.
+                        VALORES: Integridad; Transparencia; Compromiso.</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon-circle">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h4 class="counter" data-target="5000">0</h4>
+                                <p>Autos Vendidos</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon-circle">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h4 class="counter" data-target="95">0</h4>
+                                <p>% Clientes Satisfechos</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon-circle">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h4 class="counter" data-target="20">0</h4>
+                                <p>Años de Experiencia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-image-section">
+                    <div class="about-image-frame">
+                        <img src="agenciacgiautos (1).jpg" alt="Showroom CGI Autos" loading="lazy">
+                        <div class="experience-tag">
+                            <div class="tag-number">20+</div>
+                            <div class="tag-label">Años de<br>Experiencia</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section class="contacto" id="contacto">
+        <div class="container">
+            <h2>Contáctanos</h2>
+            <div class="contacto-content">
+                <div class="contacto-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Ubicación</h4>
+                            <p>RN158 721, X5940 Las Varillas, Córdoba</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Teléfono</h4>
+                            <p> Ignacio Bergmans<br>• <a href="tel:+543533431464" style="color: #ffffff; text-decoration: none;">+54 3533 431464</a></p>
+                            <p>Jorge Schibli<br>• <a href="tel:+543533431466 " style="color: #ffffff; text-decoration: none;">+54 3533 431466</a></p>
+                            <p>Cristian Juarez<br>• <a href="tel:+543533445333 " style="color: #ffffff; text-decoration: none;">+54 3533 445333 </a></p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Correo</h4>
+                            <p>grupocgiauto@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Horarios de Atención</h4>
+                            <p>
+                                <strong>Lunes a Viernes</strong><br>
+                                Mañana: 8:30 - 12:30 hs<br>
+                                Tarde: 16:00 - 20:00 hs<br>
+                                <br>
+                                <strong>Sábados</strong><br>
+                                Mañana: 8:30 - 12:00 hs<br>
+                                <br>
+                                <strong>Domingos:</strong> Cerrado
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Mapa -->
+            <div class="mapa-container">
+                <h3>Encuéntranos en el Mapa</h3>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423.5515301269974!2d-62.708150878103275!3d-31.868205656383743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95cb65001e2c1571%3A0xf05ee9fab20de9a4!2sCGI%20AUTOS!5e0!3m2!1ses!2sar!4v1764536990872!5m2!1ses!2sar" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <strong>Dirección:</strong> RN158 721, X5940 Las Varillas, Córdoba <br>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="logo-cgi-autos.png" alt="CGI Autos Logo" class="footer-logo-img">
+                        <span>CGI Autos</span>
+                    </div>
+                    <p class="footer-description">Tu confianza es nuestra misión. Vehículos de calidad certificada a precios justos.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61550856853181&locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/cgiautos/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#inicio"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="#inventario"><i class="fas fa-chevron-right"></i> Inventario</a></li>
+                        <li><a href="#acerca"><i class="fas fa-chevron-right"></i> Acerca de</a></li>
+                        <li><a href="#contacto"><i class="fas fa-chevron-right"></i> Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#servicios"><i class="fas fa-chevron-right"></i> Financiamiento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Av. Int. Jose Irazusta 68<br>Las Varillas, Córdoba</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+54 (3533) 431464<br>+54 (3533) 431466<br>+54 (3533) 445333</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>grupocgiauto@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            <p>
+                                <strong>Lunes a Viernes</strong><br>
+                                Mañana: 8:30 - 12:30 hs<br>
+                                Tarde: 16:00 - 20:00 hs<br>
+                                <br>
+                                <strong>Sábados</strong><br>
+                                Mañana: 8:30 - 12:00 hs<br>
+                                <br>
+                                <strong>Domingos:</strong> Cerrado
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 cgiautos. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="#privacidad">Política de Privacidad</a>
+                    <span>•</span>
+                    <a href="#terminos">Términos de Servicio</a>
+                    <span>•</span>
+                    <a href="#cookies">Política de Cookies</a>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        <!-- Botón WhatsApp flotante -->
+        <a href="#" onclick="mostrarOpcionesWhatsApp(); return false;" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <!-- Botón volver arriba -->
+        <button class="scroll-to-top" id="scrollToTop" aria-label="Volver arriba">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+        <!-- Schema Markup para SEO -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "AutoDealer",
+            "name": "CGI Autos",
+            "description": "Venta de autos nuevos y usados certificados con financiamiento flexible",
+            "url": "https://cgiautos.com",
+            "logo": "https://cgiautos.com/logo-cgi-autos.png",
+            "telephone": "+54-353-343-1466",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "AR"
+            },
+            "priceRange": "$$",
+            "openingHours": "Mo-Fr 09:00-18:00, Sa 09:00-13:00"
+        }
+        </script>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            var navMenu = document.querySelector('.nav-menu');
+            if (navMenu) {
+                navMenu.classList.toggle('active');
+            }
+        }
+        
+        // Cerrar menú al clickear en un enlace
+        document.addEventListener('DOMContentLoaded', function() {
+            var links = document.querySelectorAll('.nav-menu a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].addEventListener('click', function() {
+                    var navMenu = document.querySelector('.nav-menu');
+                    if (navMenu) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Modal de Clientes -->
+    <div id="clientsModal" class="modal-clients">
+        <div class="modal-content-clients">
+            <span class="close-modal-clients" onclick="closeClientsModal()">&times;</span>
+            <h2>Nuestros Clientes Satisfechos</h2>
+            <div class="clients-gallery" id="clientsGallery"></div>
+        </div>
+    </div>
+
+    <!-- Lightbox para ver imagen grande -->
+    <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox(event)">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img id="lightboxImage" src="" alt="Imagen ampliada">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="script-modern.js"></script>
+    <script>
+        function openClientsModal() {
+            document.getElementById('clientsModal').style.display = 'flex';
+            cargarClientesGallery();
+        }
+
+        function closeClientsModal() {
+            document.getElementById('clientsModal').style.display = 'none';
+        }
+
+        function cargarClientesGallery() {
+            const gallery = document.getElementById('clientsGallery');
+            
+            // Intentar cargar desde la API del servidor Flask
+            fetch('/api/clientes-gallery')
+                .then(response => {
+                    if (!response.ok) throw new Error('API no disponible');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.images && data.images.length > 0) {
+                        gallery.innerHTML = data.images.map(img => 
+                            `<img src="${img.url}" alt="Cliente Satisfecho" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="openLightbox('${img.url}')" onerror="this.parentElement.style.display='none'">`
+                        ).join('');
+                    } else {
+                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Sin imágenes cargadas aún</p>';
+                    }
+                })
+                .catch(error => {
+                    console.log('Intentando cargar imágenes locales...');
+                    cargarClientesFallback();
+                });
+        }
+
+        function cargarClientesFallback() {
+            const gallery = document.getElementById('clientsGallery');
+            
+            // Intentar acceder a las imágenes directamente desde la carpeta
+            // Primero intenta con cliente_XXXXXXX.jpg que es el formato que genera Flask
+            fetch('clientes-satisfechos/')
+                .then(response => response.text())
+                .then(html => {
+                    // Si se puede listar, buscar archivos cliente_*.jpg
+                    const regex = /cliente_[\w]+\.(jpg|jpeg|png|gif)/gi;
+                    const matches = html.match(regex);
+                    
+                    if (matches && matches.length > 0) {
+                        const unique = [...new Set(matches)];
+                        gallery.innerHTML = unique.map(file => 
+                            `<img src="clientes-satisfechos/${file}" alt="Cliente Satisfecho" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="openLightbox('clientes-satisfechos/${file}')" onerror="this.parentElement.style.display='none'">`
+                        ).join('');
+                    } else {
+                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Sin imágenes cargadas aún</p>';
+                    }
+                })
+                .catch(() => {
+                    gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Sin imágenes cargadas aún</p>';
+                });
+        }
+
+        function openLightbox(imageSrc) {
+            document.getElementById('lightboxModal').style.display = 'flex';
+            document.getElementById('lightboxImage').src = imageSrc;
+        }
+
+        function closeLightbox(event) {
+            if (event && event.target.id !== 'lightboxModal') return;
+            document.getElementById('lightboxModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('clientsModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

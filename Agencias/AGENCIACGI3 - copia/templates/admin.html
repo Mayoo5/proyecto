@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrador CGI Autos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .nav-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: rgba(0, 102, 204, 0.9);
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1f2937;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Tablas */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .img-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #1f2937;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #1f2937;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Imagen upload */
+        .image-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .image-upload:hover {
+            border-color: #0066cc;
+            background: #f0f7ff;
+        }
+
+        .image-upload.dragover {
+            border-color: #0066cc;
+            background: #f0f7ff;
+        }
+
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: grab;
+            user-select: none;
+        }
+
+        .image-preview:active {
+            cursor: grabbing;
+            opacity: 0.7;
+        }
+
+        .image-preview.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .image-preview.drag-over {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 16px;
+        }
+
+        .image-preview:hover .remove-image {
+            opacity: 1;
+        }
+
+        /* Galería de clientes */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        /* Checkbox y radio */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox,
+        .radio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox input,
+        .radio input {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox label,
+        .radio label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        /* Secciones */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section-add-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-add-item input {
+            flex: 1;
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .item span {
+            flex: 1;
+        }
+
+        .item .btn-danger {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Alert/Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+            z-index: 3000;
+            max-width: 400px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .toast.info {
+            background: #3b82f6;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #dc2626;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-header {
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+            }
+
+            .sidebar-header h2,
+            .sidebar-header p,
+            .nav-menu a span {
+                display: none;
+            }
+
+            .nav-menu a {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .image-preview-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .section-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #dc2626;
+            color: #dc2626;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>CGI Autos</h2>
+                <p>Panel Administrador</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+                <li><a href="#" onclick="showSection('autos')"><i class="fas fa-car"></i> <span>Mis Autos</span></a></li>
+                <li><a href="#" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+                <li><a href="#" onclick="showSection('reportes')"><i class="fas fa-file-chart-line"></i> <span>Reportes</span></a></li>
+                <li><a href="#" onclick="showSection('configuracion')"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard" class="section-content active">
+                <div class="header">
+                    <h1>Dashboard</h1>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number" id="total-autos">0</div>
+                        <div class="label">Autos en Catálogo</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="autos-oferta">0</div>
+                        <div class="label">En Oferta</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="autos-nuevos">0</div>
+                        <div class="label">Autos Nuevos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="autos-destacados">0</div>
+                        <div class="label">Destacados</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Últimos Autos Agregados</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Marca / Modelo</th>
+                                    <th>Precio</th>
+                                    <th>Año</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-autos">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Autos -->
+            <section id="autos" class="section-content">
+                <div class="header">
+                    <h1>Gestión de Autos</h1>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="openNewAutoModal()">
+                            <i class="fas fa-plus"></i> Agregar Auto
+                        </button>
+                    </div>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="search-autos" placeholder="Buscar por marca, modelo, año...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Marca / Modelo</th>
+                                <th>Versión</th>
+                                <th>Año</th>
+                                <th>Precio</th>
+                                <th>KM</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="autos-table">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Clientes -->
+            <section id="clientes" class="section-content">
+                <div class="header">
+                    <h1>Clientes Satisfechos</h1>
+                    <button class="btn btn-primary" onclick="openClienteModal()">
+                        <i class="fas fa-plus"></i> Agregar Foto
+                    </button>
+                </div>
+
+                <div class="gallery-container" id="clientesGallery">
+                </div>
+            </section>
+
+            <!-- Reportes -->
+            <section id="reportes" class="section-content">
+                <div class="header">
+                    <h1>Reportes</h1>
+                </div>
+                <p>Módulo en desarrollo...</p>
+            </section>
+
+            <!-- Configuración -->
+            <section id="configuracion" class="section-content">
+                <div class="header">
+                    <h1>Configuración</h1>
+                </div>
+                <p>Módulo en desarrollo...</p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal - Agregar Cliente -->
+    <div id="clienteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Foto de Cliente</h2>
+                <button class="close-modal" onclick="closeClienteModal()">&times;</button>
+            </div>
+
+            <form id="clienteForm" onsubmit="saveCliente(event)">
+                <div class="section">
+                    <h3 class="section-title">Foto del Cliente</h3>
+                    <div class="image-upload" ondrop="handleDropCliente(event)" ondragover="handleDragOverCliente(event)" ondragleave="handleDragLeaveCliente(event)" onclick="document.getElementById('fileInputCliente').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #0066cc; margin-bottom: 10px;"></i>
+                        <p style="margin-bottom: 5px; font-weight: 600;">Arrastra la foto o haz clic</p>
+                        <input type="file" id="fileInputCliente" accept=".png,.jpg,.jpeg,.gif,.webp" style="display: none;" onchange="handleFileSelectCliente(event)">
+                    </div>
+                    <div id="clienteImagePreview" style="margin-top: 20px;"></div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 30px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeClienteModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal - Nuevo/Editar Auto -->
+    <div id="autoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Nuevo Auto</h2>
+                <button class="close-modal" onclick="closeAutoModal()">&times;</button>
+            </div>
+
+            <form id="autoForm" onsubmit="saveAuto(event)">
+                <!-- Información Básica -->
+                <div class="section">
+                    <h3 class="section-title">Información Básica</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marca">Marca *</label>
+                            <input type="text" id="marca" name="marca" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo">Modelo *</label>
+                            <input type="text" id="modelo" name="modelo" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="version">Versión *</label>
+                            <input type="text" id="version" name="version" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ano">Año *</label>
+                            <input type="number" id="ano" name="ano" min="1980" max="2099" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Especificaciones Técnicas -->
+                <div class="section">
+                    <h3 class="section-title">Especificaciones Técnicas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="motor">Motor</label>
+                            <input type="text" id="motor" name="motor" placeholder="Ej: 1.6L V6">
+                        </div>
+                        <div class="form-group">
+                            <label for="transmision">Transmisión</label>
+                            <select id="transmision" name="transmision">
+                                <option value="">Selecciona una opción</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Automática">Automática</option>
+                                <option value="CVT">CVT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="combustible">Combustible</label>
+                            <select id="combustible" name="combustible">
+                                <option value="">Selecciona una opción</option>
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <option value="Eléctrico">Eléctrico</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gnc">¿Tiene GNC?</label>
+                            <select id="gnc" name="gnc">
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalles de Vehículo -->
+                <div class="section">
+                    <h3 class="section-title">Detalles del Vehículo</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <input type="text" id="color" name="color" placeholder="Ej: Blanco perla">
+                        </div>
+                        <div class="form-group">
+                            <label for="kilometraje">Kilometraje *</label>
+                            <input type="number" id="kilometraje" name="kilometraje" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="precio">Precio *</label>
+                            <input type="number" id="precio" name="precio" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="moneda">Moneda</label>
+                            <select id="moneda" name="moneda">
+                                <option value="ARS">ARS ($)</option>
+                                <option value="USD">USD ($)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="section">
+                    <h3 class="section-title">Descripción y Detalles</h3>
+                    <div class="form-group form-row full">
+                        <label for="descripcion">Descripción del Vehículo</label>
+                        <textarea id="descripcion" name="descripcion" placeholder="Describe el estado general del vehículo..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Características -->
+                <div class="section">
+                    <h3 class="section-title">Características y Equipamiento</h3>
+                    <div class="section-add-item">
+                        <input type="text" id="newCaracteristica" placeholder="Agregar característica...">
+                        <button type="button" class="btn btn-secondary btn-small" onclick="addCaracteristica()">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                    <div class="item-list" id="caracteristicas-list">
+                    </div>
+                </div>
+
+                <!-- Imágenes -->
+                <div class="section">
+                    <h3 class="section-title">Imágenes del Vehículo</h3>
+                    <div class="image-upload" id="imageUpload" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #0066cc; margin-bottom: 10px;"></i>
+                        <p style="margin-bottom: 5px; font-weight: 600; color: #374151;">Arrastra imágenes aquí o haz clic para seleccionar</p>
+                        <p style="font-size: 13px; color: #9ca3af;">PNG, JPG, JPEG, GIF, WebP (Máx. 10MB cada una)</p>
+                        <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.gif,.webp" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                    <div class="image-preview-container" id="imagePreview">
+                    </div>
+                </div>
+
+                <!-- Estado y Categoría -->
+                <div class="section">
+                    <h3 class="section-title">Estado y Categoría</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="categoria">Categoría</label>
+                            <select id="categoria" name="categoria">
+                                <option value="suv">SUV</option>
+                                <option value="pickup">Pick Up</option>
+                                <option value="auto">Auto</option>
+                                <option value="utilitario">Utilitario</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp de Contacto</label>
+                            <input type="tel" id="whatsapp" name="whatsapp" placeholder="54xxxxxxxxx">
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox">
+                            <input type="checkbox" id="nuevo" name="nuevo">
+                            <label for="nuevo">Es 0 KM / Nuevo</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="destacado" name="destacado">
+                            <label for="destacado">Destacar en portada</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="oferta" name="oferta">
+                            <label for="oferta">En oferta especial</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAutoModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Auto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentAutoId = null;
+        let selectedImages = [];
+        let caracteristicas = [];
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAutos();
+            setupSearch();
+        });
+
+        // Mostrar secciones
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            event.target.closest('a').classList.add('active');
+
+            if (sectionId === 'autos') {
+                loadAutos();
+            } else if (sectionId === 'dashboard') {
+                loadDashboard();
+            }
+        }
+
+        // Cargar dashboard
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/autos');
+                const autos = await response.json();
+                
+                document.getElementById('total-autos').textContent = autos.length;
+                document.getElementById('autos-oferta').textContent = autos.filter(a => a.oferta).length;
+                document.getElementById('autos-nuevos').textContent = autos.filter(a => a.nuevo).length;
+                document.getElementById('autos-destacados').textContent = autos.filter(a => a.destacado).length;
+
+                // Últimos 5 autos
+                const recent = autos.slice(-5).reverse();
+                const tbody = document.getElementById('recent-autos');
+                tbody.innerHTML = recent.map(auto => `
+                    <tr>
+                        <td><img src="${auto.imagen || 'placeholder.jpg'}" alt="${auto.marca}" class="img-thumbnail"></td>
+                        <td>${auto.marca} ${auto.modelo}</td>
+                        <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
+                        <td>${auto.año}</td>
+                        <td>
+                            ${auto.oferta ? '<span class="status-badge active">Oferta</span>' : ''}
+                            ${auto.nuevo ? '<span class="status-badge active">Nuevo</span>' : ''}
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-small" onclick="editAuto(${auto.id})">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showToast('Error cargando dashboard', 'error');
+            }
+        }
+
+        // Cargar autos
+        async function loadAutos() {
+            try {
+                const response = await fetch('/api/autos');
+                const autos = await response.json();
+                renderAutosTable(autos);
+            } catch (error) {
+                showToast('Error cargando autos', 'error');
+            }
+        }
+
+        // Renderizar tabla de autos
+        function renderAutosTable(autos) {
+            const tbody = document.getElementById('autos-table');
+            tbody.innerHTML = autos.map(auto => `
+                <tr>
+                    <td><img src="${auto.imagen || 'placeholder.jpg'}" alt="${auto.marca}" class="img-thumbnail"></td>
+                    <td><strong>${auto.marca}</strong><br>${auto.modelo}</td>
+                    <td>${auto.versión}</td>
+                    <td>${auto.año}</td>
+                    <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
+                    <td>${auto.kilometraje.toLocaleString('es-AR')}</td>
+                    <td style="display: flex; gap: 5px;">
+                        <button class="btn btn-secondary btn-small" onclick="editAuto(${auto.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteAuto(${auto.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Búsqueda
+        function setupSearch() {
+            document.getElementById('search-autos').addEventListener('input', async (e) => {
+                const query = e.target.value.toLowerCase();
+                const response = await fetch('/api/autos');
+                const autos = await response.json();
+                
+                const filtered = autos.filter(auto =>
+                    auto.marca.toLowerCase().includes(query) ||
+                    auto.modelo.toLowerCase().includes(query) ||
+                    auto.año.toString().includes(query)
+                );
+                
+                renderAutosTable(filtered);
+            });
+        }
+
+        // Abrir modal nuevo auto
+        function openNewAutoModal() {
+            currentAutoId = null;
+            document.getElementById('modal-title').textContent = 'Nuevo Auto';
+            document.getElementById('autoForm').reset();
+            selectedImages = [];
+            caracteristicas = [];
+            updateCaracteristicasList();
+            updateImagePreview();
+            document.getElementById('autoModal').classList.add('active');
+        }
+
+        // Cerrar modal
+        function closeAutoModal() {
+            document.getElementById('autoModal').classList.remove('active');
+        }
+
+        // Editar auto
+        async function editAuto(autoId) {
+            try {
+                const response = await fetch(`/api/auto/${autoId}`);
+                const auto = await response.json();
+                
+                currentAutoId = auto.id;
+                document.getElementById('modal-title').textContent = `Editar: ${auto.marca} ${auto.modelo}`;
+                
+                document.getElementById('marca').value = auto.marca;
+                document.getElementById('modelo').value = auto.modelo;
+                document.getElementById('version').value = auto.versión;
+                document.getElementById('ano').value = auto.año;
+                document.getElementById('motor').value = auto.motor || '';
+                document.getElementById('transmision').value = auto.transmision || '';
+                document.getElementById('combustible').value = auto.combustible || '';
+                document.getElementById('gnc').value = auto.gnc || 'no';
+                document.getElementById('color').value = auto.color || '';
+                document.getElementById('kilometraje').value = auto.kilometraje;
+                document.getElementById('precio').value = auto.precio;
+                document.getElementById('moneda').value = auto.moneda;
+                document.getElementById('descripcion').value = auto.descripcion || '';
+                document.getElementById('categoria').value = auto.categoria || 'auto';
+                document.getElementById('whatsapp').value = auto.whatsapp || '';
+                document.getElementById('nuevo').checked = auto.nuevo || false;
+                document.getElementById('destacado').checked = auto.destacado || false;
+                document.getElementById('oferta').checked = auto.oferta || false;
+                
+                caracteristicas = auto.caracteristicas || [];
+                updateCaracteristicasList();
+                
+                selectedImages = auto.imagenes || [];
+                updateImagePreview();
+                
+                document.getElementById('autoModal').classList.add('active');
+            } catch (error) {
+                showToast('Error cargando auto', 'error');
+            }
+        }
+
+        // Guardar auto
+        async function saveAuto(e) {
+            e.preventDefault();
+            
+            const autoData = {
+                marca: document.getElementById('marca').value,
+                modelo: document.getElementById('modelo').value,
+                versión: document.getElementById('version').value,
+                año: parseInt(document.getElementById('ano').value),
+                motor: document.getElementById('motor').value,
+                transmision: document.getElementById('transmision').value,
+                combustible: document.getElementById('combustible').value,
+                gnc: document.getElementById('gnc').value,
+                color: document.getElementById('color').value,
+                kilometraje: parseInt(document.getElementById('kilometraje').value),
+                precio: parseFloat(document.getElementById('precio').value),
+                moneda: document.getElementById('moneda').value,
+                descripcion: document.getElementById('descripcion').value,
+                categoria: document.getElementById('categoria').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                nuevo: document.getElementById('nuevo').checked,
+                destacado: document.getElementById('destacado').checked,
+                oferta: document.getElementById('oferta').checked,
+                caracteristicas: caracteristicas,
+                imagenes: selectedImages,
+                imagen: selectedImages[0] || ''
+            };
+
+            try {
+                let response;
+                if (currentAutoId) {
+                    response = await fetch(`/api/auto/${currentAutoId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(autoData)
+                    });
+                } else {
+                    response = await fetch('/api/auto', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(autoData)
+                    });
+                }
+
+                if (response.ok) {
+                    showToast(currentAutoId ? 'Auto actualizado correctamente' : 'Auto creado correctamente', 'success');
+                    closeAutoModal();
+                    loadAutos();
+                }
+            } catch (error) {
+                showToast('Error guardando auto', 'error');
+            }
+        }
+
+        // Eliminar auto
+        async function deleteAuto(autoId) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este auto?')) return;
+
+            try {
+                await fetch(`/api/auto/${autoId}`, { method: 'DELETE' });
+                showToast('Auto eliminado correctamente', 'success');
+                loadAutos();
+            } catch (error) {
+                showToast('Error eliminando auto', 'error');
+            }
+        }
+
+        // Características
+        function addCaracteristica() {
+            const input = document.getElementById('newCaracteristica');
+            const value = input.value.trim();
+            
+            if (value) {
+                caracteristicas.push(value);
+                input.value = '';
+                updateCaracteristicasList();
+            }
+        }
+
+        function removeCaracteristica(index) {
+            caracteristicas.splice(index, 1);
+            updateCaracteristicasList();
+        }
+
+        function updateCaracteristicasList() {
+            const list = document.getElementById('caracteristicas-list');
+            list.innerHTML = caracteristicas.map((car, i) => `
+                <div class="item">
+                    <span>${car}</span>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeCaracteristica(${i})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Carga de imágenes
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('imageUpload').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            document.getElementById('imageUpload').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('imageUpload').classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        async function handleFiles(files) {
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    // Mostrar preview instantáneamente mientras se carga
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        selectedImages.push(e.target.result);
+                        updateImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+
+                    // Subir al servidor en background
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('auto_id', currentAutoId || 'temp');
+
+                    try {
+                        const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            // Reemplazar preview local con URL del servidor
+                            const index = selectedImages.length - 1;
+                            selectedImages[index] = result.path;
+                            updateImagePreview();
+                        }
+                    } catch (error) {
+                        showToast('Error subiendo imagen', 'error');
+                    }
+                }
+            }
+        }
+
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            updateImagePreview();
+        }
+
+        function updateImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = selectedImages.map((img, i) => `
+                <div class="image-preview" draggable="true" ondragstart="dragStart(event, ${i})" ondragover="dragOver(event)" ondrop="drop(event, ${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
+                    <img src="${img}" alt="preview">
+                    <button type="button" class="remove-image" onclick="removeImage(${i})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        let draggedIndex = null;
+
+        function dragStart(e, index) {
+            draggedIndex = index;
+            e.target.closest('.image-preview').classList.add('dragging');
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.target.closest('.image-preview').classList.add('drag-over');
+        }
+
+        function dragLeave(e) {
+            e.target.closest('.image-preview').classList.remove('drag-over');
+        }
+
+        function drop(e, index) {
+            e.preventDefault();
+            e.target.closest('.image-preview').classList.remove('drag-over');
+            
+            if (draggedIndex !== null && draggedIndex !== index) {
+                // Intercambiar imágenes
+                const temp = selectedImages[draggedIndex];
+                selectedImages[draggedIndex] = selectedImages[index];
+                selectedImages[index] = temp;
+                updateImagePreview();
+            }
+            draggedIndex = null;
+        }
+
+        function dragEnd(e) {
+            e.target.closest('.image-preview').classList.remove('dragging');
+            document.querySelectorAll('.image-preview').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        // Utilidades
+        function formatCurrency(value) {
+            return value.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // ============= CLIENTES SATISFECHOS =============
+        let clientes = [];
+        let clienteImageFile = null;
+
+        function loadClientes() {
+            fetch('/api/clientes')
+                .then(r => r.json())
+                .then(data => {
+                    clientes = data.clientes || [];
+                    renderClientesGallery();
+                });
+        }
+
+        function renderClientesGallery() {
+            const gallery = document.getElementById('clientesGallery');
+            if (clientes.length === 0) {
+                gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #9ca3af;">No hay fotos de clientes aún</p>';
+                return;
+            }
+
+            gallery.innerHTML = clientes.map((cliente, i) => {
+                // Si es base64, usarlo directamente; si no, construir la ruta
+                const src = cliente.imagen.startsWith('data:') ? cliente.imagen : `/${cliente.imagen}`;
+                return `
+                    <div class="gallery-item">
+                        <img src="${src}" alt="Cliente" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3EImagen no encontrada%3C/text%3E%3C/svg%3E'">
+                        <button type="button" class="delete-btn" onclick="deleteCliente(${i})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openClienteModal() {
+            clienteImageFile = null;
+            document.getElementById('clienteImagePreview').innerHTML = '';
+            document.getElementById('clienteForm').reset();
+            document.getElementById('clienteModal').classList.add('active');
+        }
+
+        function closeClienteModal() {
+            document.getElementById('clienteModal').classList.remove('active');
+        }
+
+        function handleDragOverCliente(e) {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = '#0066cc';
+            e.currentTarget.style.background = '#f0f7ff';
+        }
+
+        function handleDragLeaveCliente(e) {
+            e.currentTarget.style.borderColor = '#d1d5db';
+            e.currentTarget.style.background = '#f9fafb';
+        }
+
+        function handleDropCliente(e) {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = '#d1d5db';
+            e.currentTarget.style.background = '#f9fafb';
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelectCliente({target: {files: e.dataTransfer.files}});
+            }
+        }
+
+        function handleFileSelectCliente(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    clienteImageFile = event.target.result;
+                    document.getElementById('clienteImagePreview').innerHTML = `
+                        <div style="text-align: center;">
+                            <img src="${event.target.result}" style="max-width: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function saveCliente(e) {
+            e.preventDefault();
+            
+            if (!clienteImageFile) {
+                showToast('Por favor selecciona una imagen', 'error');
+                return;
+            }
+
+            // Convertir base64 a Blob
+            const arr = clienteImageFile.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            const n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            for (let i = 0; i < n; i++) {
+                u8arr[i] = bstr.charCodeAt(i);
+            }
+            const blob = new Blob([u8arr], { type: mime });
+
+            // Crear FormData con la imagen
+            const formData = new FormData();
+            formData.append('file', blob, 'cliente_' + Date.now() + '.jpg');
+
+            try {
+                const response = await fetch('/api/cliente-upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    showToast('Foto agregada correctamente', 'success');
+                    closeClienteModal();
+                    loadClientes();
+                } else {
+                    showToast('Error guardando foto', 'error');
+                }
+            } catch (error) {
+                showToast('Error guardando foto', 'error');
+            }
+        }
+
+        async function deleteCliente(index) {
+            if (!confirm('¿Deseas eliminar esta foto?')) return;
+
+            try {
+                const response = await fetch(`/api/cliente/${index}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showToast('Foto eliminada', 'success');
+                    loadClientes();
+                }
+            } catch (error) {
+                showToast('Error eliminando foto', 'error');
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                window.location.href = '/logout';
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            const autoModal = document.getElementById('autoModal');
+            const clienteModal = document.getElementById('clienteModal');
+            if (e.target === autoModal) {
+                closeAutoModal();
+            }
+            if (e.target === clienteModal) {
+                closeClienteModal();
+            }
+        });
+
+        // Cargar clientes al iniciar
+        loadClientes();
+    </script>
+</body>
+</html>

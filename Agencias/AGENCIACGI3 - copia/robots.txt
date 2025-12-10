@@ -1,0 +1,22 @@
+# robots.txt
+# Archivo para optimización SEO - Indica a los motores de búsqueda cómo indexar el sitio
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Google específico
+User-agent: Googlebot
+Allow: /
+
+# Bing específico
+User-agent: Bingbot
+Allow: /
+
+# Indicar la ubicación del sitemap
+Sitemap: https://cgiautos.com/sitemap.xml
+
+# Tiempo de rastreo
+Crawl-delay: 1

@@ -1,0 +1,26 @@
+{
+  "name": "CGI Autos - Venta de Autos Nuevos y Usados",
+  "short_name": "CGI Autos",
+  "description": "Encuentra tu auto ideal con CGI Autos. Amplio inventario, financiamiento flexible y atención personalizada.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo-cgi-autos.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo-cgi-autos.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["automotive", "shopping"],
+  "lang": "es-AR"
+}

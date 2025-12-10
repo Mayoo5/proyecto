@@ -1,0 +1,8 @@
+{
+  "users": [
+    {
+      "username": "grupocgiautos",
+      "password": "scrypt:32768:8:1$TowqNdKOaL68qpEH$40571f861aa30d8be285d532f4129c59ae98c810c8dda038d1b8054797cba4671a48969bf3e545f4645be946908ed24dde8019f91ee06ae40457f378fef78e6a"
+    }
+  ]
+}

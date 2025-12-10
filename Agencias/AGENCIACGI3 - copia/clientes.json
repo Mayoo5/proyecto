@@ -1,0 +1,104 @@
+{
+  "clientes": [
+    {
+      "id": 0,
+      "imagen": "clientes-satisfechos/cliente_0fc8fe786476416486cc8bb2e0480448.jpg"
+    },
+    {
+      "id": 1,
+      "imagen": "clientes-satisfechos/cliente_0fe0f3a6b3db4cb69c1fcd85db42e222.jpg"
+    },
+    {
+      "id": 2,
+      "imagen": "clientes-satisfechos/cliente_1f167ca148c14bcb9a973acff47abe12.jpg"
+    },
+    {
+      "id": 3,
+      "imagen": "clientes-satisfechos/cliente_465ad5d2fccc4b4ea40cfeedda22845b.jpg"
+    },
+    {
+      "id": 4,
+      "imagen": "clientes-satisfechos/cliente_5f555afe77c84039bf4b17b2776c2603.jpg"
+    },
+    {
+      "id": 5,
+      "imagen": "clientes-satisfechos/cliente_6f2acb84332548f6b0dd0fc80c2b316e.jpg"
+    },
+    {
+      "id": 6,
+      "imagen": "clientes-satisfechos/cliente_6f4a6445839d4aa7933d5f06a82ea095.jpg"
+    },
+    {
+      "id": 7,
+      "imagen": "clientes-satisfechos/cliente_7442642c848f4aa6a649052763d4c6d6.jpg"
+    },
+    {
+      "id": 8,
+      "imagen": "clientes-satisfechos/cliente_78ea811ae4d340faabb575a2217a9e6e.jpg"
+    },
+    {
+      "id": 9,
+      "imagen": "clientes-satisfechos/cliente_7ba697161a40484dbfc75f42edd2ad81.jpg"
+    },
+    {
+      "id": 10,
+      "imagen": "clientes-satisfechos/cliente_7f6a721d1c214db38be301558e33bc1b.jpg"
+    },
+    {
+      "id": 11,
+      "imagen": "clientes-satisfechos/cliente_8384b40d16bd4726afb34d5616af1c8d.jpg"
+    },
+    {
+      "id": 12,
+      "imagen": "clientes-satisfechos/cliente_88e4b96e81a84706b805f30f68c96026.jpg"
+    },
+    {
+      "id": 13,
+      "imagen": "clientes-satisfechos/cliente_965c95fa98a848c0a763da91f0e530e8.jpg"
+    },
+    {
+      "id": 14,
+      "imagen": "clientes-satisfechos/cliente_ad76180939a840468770a42792f7f9db.jpg"
+    },
+    {
+      "id": 15,
+      "imagen": "clientes-satisfechos/cliente_b2f6c5ca4c424cf6a96175c22e61a128.jpg"
+    },
+    {
+      "id": 16,
+      "imagen": "clientes-satisfechos/cliente_b5ef0f969c86476c9c25562f196d0960.jpg"
+    },
+    {
+      "id": 17,
+      "imagen": "clientes-satisfechos/cliente_bfaf624a7c0e42f7a838aab0d4e96d6a.jpg"
+    },
+    {
+      "id": 18,
+      "imagen": "clientes-satisfechos/cliente_c4e076698e4240b0bb426e2f2c2816e6.jpg"
+    },
+    {
+      "id": 19,
+      "imagen": "clientes-satisfechos/cliente_ce10447d7b8248b488b040329aecc4be.jpg"
+    },
+    {
+      "id": 20,
+      "imagen": "clientes-satisfechos/cliente_cebd0be1a61e4aa3aa8b44e5916be917.jpg"
+    },
+    {
+      "id": 21,
+      "imagen": "clientes-satisfechos/cliente_e79fe6e09c8e4450ab29632fcc4d3a49.jpg"
+    },
+    {
+      "id": 22,
+      "imagen": "clientes-satisfechos/cliente_ed27c2f2ea1a45f18f23461acb77209d.jpg"
+    },
+    {
+      "id": 23,
+      "imagen": "clientes-satisfechos/cliente_f0ea23ab8c194a799497aa294089379e.jpg"
+    },
+    {
+      "id": 24,
+      "imagen": "clientes-satisfechos/cliente_fc44db2ccb6c45c1a2d59eb2f194433b.jpg"
+    }
+  ]
+}
