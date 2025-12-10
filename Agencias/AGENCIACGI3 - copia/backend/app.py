@@ -145,8 +145,16 @@ def check_login():
 
 @app.route('/')
 def index():
-    """Sirve la página principal"""
-    return send_from_directory(FRONTEND_DIR, 'index.html')
+    """API disponible"""
+    return jsonify({
+        'message': 'CGI Autos API',
+        'version': '1.0',
+        'endpoints': {
+            'autos': '/api/autos',
+            'login': '/login',
+            'clientes': '/api/clientes'
+        }
+    })
 
 @app.route('/admin')
 def admin_page():
