@@ -1,53 +1,83 @@
-# Panel Administrador CGI Autos
+# CGI Autos - Agencia de Vehículos
 
-Panel completo para gestionar autos, imágenes y detalles del inventario.
+Sistema completo para gestionar catálogo de autos, testimonios de clientes e inventario.
 
-## Instalación Local (Windows)
+## Estructura del Proyecto
 
-1. Abre `run_local.bat` - instalará dependencias y ejecutará la app
-2. Abre tu navegador en `http://localhost:5000`
-3. ¡Listo! Empieza a agregar autos
-
-## Instalación en PythonAnywhere
-
-### 1. Crear cuenta y Clonar el proyecto
-```bash
-git clone tu-repositorio
-cd cgiautos-admin
+```
+AGENCIACGI3/
+├── frontend/                    # Sitio web estático
+│   ├── index.html              # Página principal
+│   ├── admin.html              # Panel de admin
+│   ├── admin_clientes_satisfechos.html  # Testimonios
+│   ├── styles/                 # CSS
+│   ├── scripts/                # JavaScript
+│   ├── fotos-autos/            # Imágenes de vehículos
+│   ├── clientes-satisfechos/   # Fotos de testimonios
+│   └── README.md               # Docs del frontend
+│
+└── backend/                     # API y servidor
+    ├── app.py                  # Aplicación Flask
+    ├── wsgi.py                 # Configuración WSGI
+    ├── requirements.txt        # Dependencias Python
+    ├── autos.json              # BD de vehículos
+    ├── clientes.json           # BD de testimonios
+    ├── users.json              # BD de usuarios
+    ├── templates/              # Templates HTML
+    └── README.md               # Docs del backend
 ```
 
-### 2. Crear Virtual Environment
+## Ventajas de esta estructura
+
+✅ **Frontend y Backend separados** - Mejor organización y mantenimiento
+✅ **Despliegue independiente** - Actualizar cada uno por separado
+✅ **Escalable** - Fácil agregar más funcionalidades
+✅ **CDN optimizado** - Frontend en Netlify (gratis y rápido)
+✅ **Backend flexible** - Deploy en Railway, Heroku, Render, etc.
+
+## Ejecución Local
+
+### 1. Abrir la página web
 ```bash
-mkvirtualenv cgiautos --python=/usr/bin/python3.9
+# Opción A: Simplemente abre frontend/index.html en tu navegador
+# O con servidor local para desarrollo:
+cd frontend
+python -m http.server 8000
+```
+
+Luego abre `http://localhost:8000`
+
+### 2. Ejecutar el backend (API)
+```bash
+# Windows - Ejecuta run_local.bat (automático)
+# O manualmente:
+cd backend
 pip install -r requirements.txt
+python app.py
 ```
 
-### 3. Configurar Web App en PythonAnywhere
-- Ve a "Web" en tu dashboard
-- Click "Add a new web app"
-- Elige "Manual configuration" + Python 3.9
-- En "Source code" apunta a `/home/tu_usuario/cgiautos-admin`
-- En "WSGI configuration file" edita el archivo y asegúrate que importe:
-```python
-import sys
-sys.path.insert(0, '/home/tu_usuario/cgiautos-admin')
-from app import app as application
-```
+Backend disponible en `http://localhost:5000`
 
-### 4. Configurar Rutas de archivos estáticos
-En "Web" → "Static files":
-- URL: `/static`
-- Directory: `/home/tu_usuario/cgiautos-admin/static`
+## Despliegue en Producción
 
-- URL: `/fotos-autos`
-- Directory: `/home/tu_usuario/cgiautos-admin/fotos-autos`
+### Frontend → Netlify (Gratis)
+1. Push a GitHub
+2. En Netlify, crea nuevo proyecto
+3. Conecta el repo y selecciona carpeta base: `frontend/`
+4. ¡Listo! Tu sitio está online
 
-### 5. Reload la app
-- Botón "Reload" en la web app
+### Backend → Railway/Heroku/Render
+1. Push a GitHub
+2. En tu plataforma de deploy:
+   - Conecta el repo
+   - Carpeta base: `backend/`
+   - Start command: `python app.py` (o `gunicorn wsgi:application`)
+3. ¡Listo! Tu API está online
 
 ## Archivos Importantes
 
-- `app.py` - Backend Flask (APIs y rutas)
+- `backend/app.py` - Backend Flask (APIs)
+
 - `wsgi.py` - Configuración para PythonAnywhere
 - `templates/admin.html` - Panel administrador
 - `autos.json` - Base de datos (persiste los datos)

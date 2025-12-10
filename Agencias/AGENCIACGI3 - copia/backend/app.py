@@ -9,19 +9,26 @@ import mimetypes
 import io
 import base64
 
-app = Flask(__name__)
+# Obtener la ruta base del proyecto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__, static_folder=os.path.join(FRONTEND_DIR), static_url_path='')
 app.secret_key = 'tu_clave_secreta_super_segura_cambiar_en_produccion'
 
 # Configuración
-UPLOAD_FOLDER = 'fotos-autos'
+UPLOAD_FOLDER = os.path.join(FRONTEND_DIR, 'fotos-autos')
+CLIENTES_FOLDER = os.path.join(FRONTEND_DIR, 'clientes-satisfechos')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
-# Crear carpeta si no existe
+# Crear carpetas si no existen
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(CLIENTES_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -29,7 +36,8 @@ def allowed_file(filename):
 def get_autos_data():
     """Carga los datos de autos.json"""
     try:
-        with open('autos.json', 'r', encoding='utf-8') as f:
+        autos_path = os.path.join(BACKEND_DIR, 'autos.json')
+        with open(autos_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             return data
     except:
@@ -38,7 +46,8 @@ def get_autos_data():
 def get_users_data():
     """Carga los datos de usuarios"""
     try:
-        with open('users.json', 'r', encoding='utf-8') as f:
+        users_path = os.path.join(BACKEND_DIR, 'users.json')
+        with open(users_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except:
         # Crear usuario por defecto
@@ -55,25 +64,29 @@ def get_users_data():
 
 def save_users_data(data):
     """Guarda los datos de usuarios"""
-    with open('users.json', 'w', encoding='utf-8') as f:
+    users_path = os.path.join(BACKEND_DIR, 'users.json')
+    with open(users_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def save_autos_data(data):
     """Guarda los datos en autos.json"""
-    with open('autos.json', 'w', encoding='utf-8') as f:
+    autos_path = os.path.join(BACKEND_DIR, 'autos.json')
+    with open(autos_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def get_clientes_data():
     """Carga los datos de clientes"""
     try:
-        with open('clientes.json', 'r', encoding='utf-8') as f:
+        clientes_path = os.path.join(BACKEND_DIR, 'clientes.json')
+        with open(clientes_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except:
         return {"clientes": []}
 
 def save_clientes_data(data):
     """Guarda los datos de clientes"""
-    with open('clientes.json', 'w', encoding='utf-8') as f:
+    clientes_path = os.path.join(BACKEND_DIR, 'clientes.json')
+    with open(clientes_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def compress_image(filepath, max_width=1200, max_height=1200, quality=85):
@@ -131,11 +144,19 @@ def check_login():
             return redirect(url_for('login'))
 
 @app.route('/')
-def admin_panel():
-    """Sirve el panel administrador"""
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    return render_template('admin.html')
+def index():
+    """Sirve la página principal"""
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+@app.route('/admin')
+def admin_page():
+    """Sirve la página de admin pública"""
+    return send_from_directory(FRONTEND_DIR, 'admin.html')
+
+@app.route('/clientes-satisfechos-page')
+def clientes_page():
+    """Sirve la página de clientes satisfechos"""
+    return send_from_directory(FRONTEND_DIR, 'admin_clientes_satisfechos.html')
 
 @app.route('/api/autos', methods=['GET'])
 def get_autos():
@@ -294,10 +315,7 @@ def upload_cliente():
     if file and allowed_file(file.filename):
         # Generar nombre único
         filename = secure_filename(f"cliente_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.jpg")
-        filepath = os.path.join('clientes-satisfechos', filename)
-        
-        # Asegurar que la carpeta existe
-        os.makedirs('clientes-satisfechos', exist_ok=True)
+        filepath = os.path.join(CLIENTES_FOLDER, filename)
         
         # Guardar archivo
         file.save(filepath)
@@ -331,7 +349,7 @@ def delete_cliente(cliente_id):
         if 'imagen' in cliente:
             imagen_path = cliente['imagen']
             # Construir ruta absoluta
-            full_path = os.path.join(os.getcwd(), imagen_path)
+            full_path = os.path.join(FRONTEND_DIR, imagen_path)
             try:
                 if os.path.exists(full_path):
                     os.remove(full_path)
@@ -350,7 +368,7 @@ def delete_cliente(cliente_id):
 def serve_cliente_image(filename):
     """Sirve imágenes de clientes"""
     try:
-        return send_from_directory(os.path.abspath('clientes-satisfechos'), filename)
+        return send_from_directory(CLIENTES_FOLDER, filename)
     except:
         return jsonify({'error': 'Imagen no encontrada'}), 404
 
