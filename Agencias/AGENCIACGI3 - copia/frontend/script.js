@@ -11,7 +11,7 @@ let autos = [];
 
 async function cargarAutosDesdeServidor() {
     try {
-        const response = await fetch('autos.json');
+        const response = await fetch('https://gonzalobergmans.pythonanywhere.com/api/autos');
         if (response.ok) {
             const data = await response.json();
             autos = data.autos_ejemplo || [];
