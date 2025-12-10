@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from PIL import Image
@@ -17,6 +18,7 @@ TEMPLATES_DIR = os.path.join(BACKEND_DIR, 'templates')
 
 app = Flask(__name__, template_folder=TEMPLATES_DIR, static_folder=os.path.join(FRONTEND_DIR), static_url_path='')
 app.secret_key = 'tu_clave_secreta_super_segura_cambiar_en_produccion'
+CORS(app)
 
 # Configuración
 UPLOAD_FOLDER = os.path.join(FRONTEND_DIR, 'fotos-autos')
