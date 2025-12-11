@@ -832,8 +832,8 @@
         function cargarClientesGallery() {
             const gallery = document.getElementById('clientsGallery');
             
-            // Intentar cargar desde la API del servidor Flask
-            fetch('/api/clientes-gallery')
+            // Cargar desde la API de PythonAnywhere
+            fetch('https://gonzalobergmans.pythonanywhere.com/api/clientes-gallery')
                 .then(response => {
                     if (!response.ok) throw new Error('API no disponible');
                     return response.json();
@@ -848,8 +848,8 @@
                     }
                 })
                 .catch(error => {
-                    console.log('Intentando cargar imágenes locales...');
-                    cargarClientesFallback();
+                    console.error('Error cargando galería de clientes:', error);
+                    gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Sin imágenes cargadas aún</p>';
                 });
         }
 
