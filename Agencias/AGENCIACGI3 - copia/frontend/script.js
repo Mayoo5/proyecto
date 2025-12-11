@@ -14,7 +14,8 @@ async function cargarAutosDesdeServidor() {
         const response = await fetch('https://gonzalobergmans.pythonanywhere.com/api/autos');
         if (response.ok) {
             const data = await response.json();
-            autos = data.autos_ejemplo || [];
+            // La API devuelve directamente el array de autos
+            autos = Array.isArray(data) ? data : [];
             cargarAutos();
             // Actualizar contador inicial
             actualizarContadorResultados(autos.length);
