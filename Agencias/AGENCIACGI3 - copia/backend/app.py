@@ -140,6 +140,10 @@ def logout():
 def check_login():
     """Verifica si el usuario está logeado"""
     if request.path.startswith('/api/'):
+        # Permitir GET a /api/autos y /api/clientes-gallery sin autenticación (público)
+        if request.path in ['/api/autos', '/api/clientes-gallery'] and request.method == 'GET':
+            return None
+        # Resto de APIs requieren autenticación
         if not session.get('logged_in'):
             return jsonify({'error': 'No autenticado'}), 401
     elif request.path not in ['/login', '/static']:
