@@ -33,6 +33,11 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CLIENTES_FOLDER, exist_ok=True)
 
+# Debug: Imprimir rutas para verificar
+print(f"UPLOAD_FOLDER: {UPLOAD_FOLDER}")
+print(f"¿Existe UPLOAD_FOLDER? {os.path.exists(UPLOAD_FOLDER)}")
+print(f"¿Puede escribir en UPLOAD_FOLDER? {os.access(UPLOAD_FOLDER, os.W_OK)}")
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
