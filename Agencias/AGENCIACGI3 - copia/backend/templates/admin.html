@@ -1423,20 +1423,27 @@
         function handleFileSelect(e) {
             const files = e.target.files;
             handleFiles(files);
+            // Limpiar el input para permitir seleccionar el mismo archivo nuevamente
+            e.target.value = '';
         }
 
         async function handleFiles(files) {
             for (let file of files) {
                 if (file.type.startsWith('image/')) {
-                    // Mostrar preview instantáneamente mientras se carga
+                    // Agregar un placeholder temporalmente
+                    const tempIndex = selectedImages.length;
+                    selectedImages.push('loading');
+                    updateImagePreview();
+
+                    // Mostrar preview mientras se sube
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        selectedImages.push(e.target.result);
+                        selectedImages[tempIndex] = e.target.result;
                         updateImagePreview();
                     };
                     reader.readAsDataURL(file);
 
-                    // Subir al servidor en background
+                    // Subir al servidor
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('auto_id', currentAutoId || 'temp');
@@ -1450,12 +1457,20 @@
                         const result = await response.json();
                         if (result.success) {
                             // Reemplazar preview local con URL del servidor
-                            const index = selectedImages.length - 1;
-                            selectedImages[index] = result.path;
+                            selectedImages[tempIndex] = result.path;
+                            updateImagePreview();
+                        } else {
+                            showToast('Error subiendo imagen: ' + (result.error || 'Error desconocido'), 'error');
+                            // Remover la imagen que falló
+                            selectedImages.splice(tempIndex, 1);
                             updateImagePreview();
                         }
                     } catch (error) {
+                        console.error('Error subiendo imagen:', error);
                         showToast('Error subiendo imagen', 'error');
+                        // Remover la imagen que falló
+                        selectedImages.splice(tempIndex, 1);
+                        updateImagePreview();
                     }
                 }
             }
@@ -1468,14 +1483,25 @@
 
         function updateImagePreview() {
             const preview = document.getElementById('imagePreview');
-            preview.innerHTML = selectedImages.map((img, i) => `
-                <div class="image-preview" draggable="true" ondragstart="dragStart(event, ${i})" ondragover="dragOver(event)" ondrop="drop(event, ${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
-                    <img src="${img}" alt="Imagen ${i + 1}">
-                    <button type="button" class="remove-image" onclick="removeImage(${i})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `).join('');
+            preview.innerHTML = selectedImages.map((img, i) => {
+                // Manejar estado de carga
+                if (img === 'loading') {
+                    return `
+                        <div class="image-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #0066cc;"></i>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="image-preview" draggable="true" ondragstart="dragStart(event, ${i})" ondragover="dragOver(event)" ondrop="drop(event, ${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
+                        <img src="${img}" alt="Imagen ${i + 1}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:#999;\\'><i class=\\'fas fa-exclamation-triangle\\'></i> Error</div>'">
+                        <button type="button" class="remove-image" onclick="removeImage(${i})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
 
         let draggedIndex = null;
