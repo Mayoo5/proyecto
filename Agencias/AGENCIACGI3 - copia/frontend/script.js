@@ -251,10 +251,15 @@ function mostrarDetalles(auto) {
         !img.includes('Sin+Imagen')
     ) : [];
     
-    // Normalizar rutas de imágenes (agregar / al inicio si no lo tienen)
+    // Normalizar rutas de imágenes para que apunten al servidor de producción
     const imagenesNormalizadas = imagenesValidas.map(img => {
-        if (img && !img.startsWith('http') && !img.startsWith('/')) {
-            return '/' + img;
+        if (img && !img.startsWith('http')) {
+            // Si la ruta no tiene el servidor, agregarlo
+            if (img.startsWith('/')) {
+                return 'https://gonzalobergmans.pythonanywhere.com' + img;
+            } else {
+                return 'https://gonzalobergmans.pythonanywhere.com/' + img;
+            }
         }
         return img;
     });
