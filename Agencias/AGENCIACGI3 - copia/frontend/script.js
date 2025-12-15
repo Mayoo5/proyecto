@@ -92,6 +92,11 @@ function crearTarjetaAuto(auto) {
         imagenPrincipal = auto.imagenes[0];
     }
     
+    // Asegurar que la ruta tenga el / al inicio
+    if (imagenPrincipal && !imagenPrincipal.startsWith('http') && !imagenPrincipal.startsWith('/')) {
+        imagenPrincipal = '/' + imagenPrincipal;
+    }
+    
     // Calcular "estado" del vehículo
     const kmPorAño = auto.kilometraje / (añoActual - auto.año + 1);
     let estadoVehiculo = '';
@@ -241,17 +246,27 @@ function mostrarDetalles(auto) {
         !img.includes('Sin+Imagen')
     ) : [];
     
+    // Normalizar rutas de imágenes (agregar / al inicio si no lo tienen)
+    const imagenesNormalizadas = imagenesValidas.map(img => {
+        if (img && !img.startsWith('http') && !img.startsWith('/')) {
+            return '/' + img;
+        }
+        return img;
+    });
+    
     // Crear galería de imágenes si existen múltiples imágenes
-    const imagenesHTML = imagenesValidas.length > 0 ? `
+    const imagenesHTML = imagenesNormalizadas.length > 0 ? `
         <div style="margin-bottom: 1.5rem;">
-            <img id="imagen-principal" src="${imagenesValidas[0]}" alt="${auto.marca} ${auto.modelo}" 
-                 style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+            <img id="imagen-principal" src="${imagenesNormalizadas[0]}" alt="${auto.marca} ${auto.modelo}" 
+                 style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" 
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22600%22%3E%3Crect fill=%22%23ddd%22 width=%22800%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2220%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3EImagen no disponible%3C/text%3E%3C/svg%3E'">
             <div style="display: flex; gap: 0.5rem; overflow-x: auto;">
-                ${imagenesValidas.map((img, index) => `
+                ${imagenesNormalizadas.map((img, index) => `
                     <img src="${img}" 
                          onclick="document.getElementById('imagen-principal').src='${img}';"
                          style="width: 100px; height: 75px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid ${index === 0 ? '#1e40af' : '#e5e7eb'};" 
-                         alt="Vista ${index + 1}">
+                         alt="Vista ${index + 1}"
+                         onerror="this.style.display='none'">
                 `).join('')}
             </div>
         </div>
