@@ -92,9 +92,14 @@ function crearTarjetaAuto(auto) {
         imagenPrincipal = auto.imagenes[0];
     }
     
-    // Asegurar que la ruta tenga el / al inicio
-    if (imagenPrincipal && !imagenPrincipal.startsWith('http') && !imagenPrincipal.startsWith('/')) {
-        imagenPrincipal = '/' + imagenPrincipal;
+    // Asegurar que la ruta apunte al servidor de producción
+    if (imagenPrincipal && !imagenPrincipal.startsWith('http')) {
+        // Si la ruta no tiene el servidor, agregarlo
+        if (imagenPrincipal.startsWith('/')) {
+            imagenPrincipal = 'https://gonzalobergmans.pythonanywhere.com' + imagenPrincipal;
+        } else {
+            imagenPrincipal = 'https://gonzalobergmans.pythonanywhere.com/' + imagenPrincipal;
+        }
     }
     
     // Calcular "estado" del vehículo
