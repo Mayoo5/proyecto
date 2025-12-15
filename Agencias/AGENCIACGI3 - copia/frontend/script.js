@@ -96,9 +96,9 @@ function crearTarjetaAuto(auto) {
     if (imagenPrincipal && !imagenPrincipal.startsWith('http')) {
         // Si la ruta no tiene el servidor, agregarlo
         if (imagenPrincipal.startsWith('/')) {
-            imagenPrincipal = 'https://gonzalobergmans.pythonanywhere.com' + imagenPrincipal;
+            imagenPrincipal = 'https://cgiautos.com.ar' + imagenPrincipal;
         } else {
-            imagenPrincipal = 'https://gonzalobergmans.pythonanywhere.com/' + imagenPrincipal;
+            imagenPrincipal = 'https://cgiautos.com.ar/' + imagenPrincipal;
         }
     }
     
@@ -256,9 +256,9 @@ function mostrarDetalles(auto) {
         if (img && !img.startsWith('http')) {
             // Si la ruta no tiene el servidor, agregarlo
             if (img.startsWith('/')) {
-                return 'https://gonzalobergmans.pythonanywhere.com' + img;
+                return 'https://cgiautos.com.ar' + img;
             } else {
-                return 'https://gonzalobergmans.pythonanywhere.com/' + img;
+                return 'https://cgiautos.com.ar/' + img;
             }
         }
         return img;
