@@ -1470,7 +1470,7 @@
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = selectedImages.map((img, i) => `
                 <div class="image-preview" draggable="true" ondragstart="dragStart(event, ${i})" ondragover="dragOver(event)" ondrop="drop(event, ${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
-                    <img src="${img}" alt="preview">
+                    <img src="${img}" alt="Imagen ${i + 1}">
                     <button type="button" class="remove-image" onclick="removeImage(${i})">
                         <i class="fas fa-times"></i>
                     </button>

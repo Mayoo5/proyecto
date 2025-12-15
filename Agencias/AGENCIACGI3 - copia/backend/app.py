@@ -257,7 +257,7 @@ def upload_image():
     return jsonify({
         'success': True,
         'filename': filename,
-        'path': f"{app.config['UPLOAD_FOLDER']}/{filename}"
+        'path': f"fotos-autos/{filename}"
     })
 
 @app.route('/api/delete-image', methods=['POST'])
