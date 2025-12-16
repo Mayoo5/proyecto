@@ -5,6 +5,27 @@
 // Variable global para almacenar los autos
 let autos = [];
 
+// Mapeo de números de WhatsApp a nombres de contactos
+const contactosMap = {
+    '+54 3533 431464': 'Ignacio',
+    '+543533431464': 'Ignacio',
+    '543533431464': 'Ignacio',
+    '+54 3533 431466': 'Jorge',
+    '+543533431466': 'Jorge',
+    '543533431466': 'Jorge',
+    '+54 3533 445333': 'Cristian',
+    '+543533445333': 'Cristian',
+    '543533445333': 'Cristian'
+};
+
+// Función para obtener el nombre del contacto
+function obtenerNombreContacto(numero) {
+    if (!numero) return 'WhatsApp';
+    // Normalizar el número para buscar en el mapeo
+    const numeroLimpio = numero.replace(/\s/g, '');
+    return contactosMap[numero] || contactosMap[numeroLimpio] || 'WhatsApp';
+}
+
 /* ============================================
    CARGAR AUTOS DESDE ARCHIVO JSON
    ============================================ */
@@ -174,10 +195,10 @@ function crearTarjetaAuto(auto) {
                         <button class="btn-icon-pro ver-detalles" data-id="${auto.id}" title="Ver Detalles">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="WhatsApp 1" target="_blank">
+                        <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="${obtenerNombreContacto(auto.whatsapp)}" target="_blank">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        ${auto.whatsapp2 ? `<a href="https://wa.me/${auto.whatsapp2}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="WhatsApp 2" target="_blank">
+                        ${auto.whatsapp2 ? `<a href="https://wa.me/${auto.whatsapp2}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="${obtenerNombreContacto(auto.whatsapp2)}" target="_blank">
                             <i class="fab fa-whatsapp"></i>
                         </a>` : ''}
                     </div>
