@@ -1106,8 +1106,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="whatsapp">WhatsApp de Contacto</label>
-                            <input type="tel" id="whatsapp" name="whatsapp" placeholder="54xxxxxxxxx">
+                            <label for="whatsapp">WhatsApp de Contacto 1</label>
+                            <input type="tel" id="whatsapp" name="whatsapp" placeholder="54xxxxxxxxx" required>
+                            <small style="color: #666; font-size: 12px;">Número principal de contacto</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp2">WhatsApp de Contacto 2 (Opcional)</label>
+                            <input type="tel" id="whatsapp2" name="whatsapp2" placeholder="54xxxxxxxxx">
+                            <small style="color: #666; font-size: 12px;">Número secundario de contacto</small>
                         </div>
                     </div>
                     <div class="checkbox-group">
@@ -1291,6 +1297,7 @@
                 document.getElementById('descripcion').value = auto.descripcion || '';
                 document.getElementById('categoria').value = auto.categoria || 'auto';
                 document.getElementById('whatsapp').value = auto.whatsapp || '';
+                document.getElementById('whatsapp2').value = auto.whatsapp2 || '';
                 document.getElementById('nuevo').checked = auto.nuevo || false;
                 document.getElementById('destacado').checked = auto.destacado || false;
                 document.getElementById('oferta').checked = auto.oferta || false;
@@ -1327,6 +1334,7 @@
                 descripcion: document.getElementById('descripcion').value,
                 categoria: document.getElementById('categoria').value,
                 whatsapp: document.getElementById('whatsapp').value,
+                whatsapp2: document.getElementById('whatsapp2').value,
                 nuevo: document.getElementById('nuevo').checked,
                 destacado: document.getElementById('destacado').checked,
                 oferta: document.getElementById('oferta').checked,

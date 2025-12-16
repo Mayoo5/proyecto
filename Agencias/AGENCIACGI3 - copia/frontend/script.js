@@ -174,9 +174,12 @@ function crearTarjetaAuto(auto) {
                         <button class="btn-icon-pro ver-detalles" data-id="${auto.id}" title="Ver Detalles">
                             <i class="fas fa-info-circle"></i>
                         </button>
-                        <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="Consultar por WhatsApp" target="_blank">
+                        <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="WhatsApp 1" target="_blank">
                             <i class="fab fa-whatsapp"></i>
                         </a>
+                        ${auto.whatsapp2 ? `<a href="https://wa.me/${auto.whatsapp2}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" class="btn-icon-pro btn-whatsapp" title="WhatsApp 2" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>` : ''}
                     </div>
                 </div>
             </div>
@@ -360,11 +363,14 @@ function mostrarDetalles(auto) {
                 </div>
             </div>
             
-            <div style="display: flex; gap: 1rem;">
-                <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" target="_blank" class="cta-button btn-contactar-modal" style="text-decoration: none; text-align: center; background: linear-gradient(135deg, #25D366, #128C7E); color: white; font-weight: 700;">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="https://wa.me/${auto.whatsapp || '543533684820'}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" target="_blank" class="cta-button btn-contactar-modal" style="text-decoration: none; text-align: center; background: linear-gradient(135deg, #25D366, #128C7E); color: white; font-weight: 700; flex: 1; min-width: 200px;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp 1
                 </a>
-                <button class="cta-button btn-cerrar-modal" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-weight: 700;" onclick="document.getElementById('modal-auto').classList.remove('active')">
+                ${auto.whatsapp2 ? `<a href="https://wa.me/${auto.whatsapp2}?text=Hola, estoy interesado en el ${auto.marca} ${auto.modelo} ${auto.año}" target="_blank" class="cta-button btn-contactar-modal" style="text-decoration: none; text-align: center; background: linear-gradient(135deg, #25D366, #128C7E); color: white; font-weight: 700; flex: 1; min-width: 200px;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp 2
+                </a>` : ''}
+                <button class="cta-button btn-cerrar-modal" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-weight: 700; flex: 1; min-width: 150px;" onclick="document.getElementById('modal-auto').classList.remove('active')">
                     Cerrar
                 </button>
             </div>
