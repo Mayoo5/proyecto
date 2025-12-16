@@ -236,11 +236,17 @@ def delete_auto(auto_id):
 @app.route('/api/upload', methods=['POST'])
 def upload_image():
     """Carga una imagen"""
+    print("=== INICIO UPLOAD ===")
+    print(f"UPLOAD_FOLDER: {app.config['UPLOAD_FOLDER']}")
+    print(f"Carpeta existe: {os.path.exists(app.config['UPLOAD_FOLDER'])}")
+    
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
     
     file = request.files['file']
     auto_id = request.form.get('auto_id', 'temp')
+    print(f"Auto ID: {auto_id}")
+    print(f"Filename: {file.filename}")
     
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
@@ -254,16 +260,24 @@ def upload_image():
     filename = f"{auto_id}_{timestamp}_01.{ext}"
     
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
+    print(f"Guardando en: {filepath}")
     
-    # Comprimir imagen
-    compress_image(filepath)
-    
-    return jsonify({
-        'success': True,
-        'filename': filename,
-        'path': f"fotos-autos/{filename}"
-    })
+    try:
+        file.save(filepath)
+        print(f"Archivo guardado. Existe: {os.path.exists(filepath)}")
+        
+        # Comprimir imagen
+        compress_image(filepath)
+        print(f"Imagen comprimida. Existe: {os.path.exists(filepath)}")
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'path': f"fotos-autos/{filename}"
+        })
+    except Exception as e:
+        print(f"ERROR al guardar: {str(e)}")
+        return jsonify({'error': f'Error al guardar: {str(e)}'}), 500
 
 @app.route('/api/delete-image', methods=['POST'])
 def delete_image():

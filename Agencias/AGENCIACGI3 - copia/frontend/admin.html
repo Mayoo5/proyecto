@@ -739,9 +739,11 @@
 
             const recent = autos.slice(-5).reverse();
             const tbody = document.getElementById('recent-autos');
-            tbody.innerHTML = recent.map(auto => `
+            tbody.innerHTML = recent.map(auto => {
+                const imgUrl = auto.imagen ? (auto.imagen.startsWith('http') ? auto.imagen : `https://gonzalobergmans.pythonanywhere.com/${auto.imagen}`) : 'placeholder.jpg';
+                return `
                 <tr>
-                    <td><img src="${auto.imagen || 'placeholder.jpg'}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2212%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESin foto%3C/text%3E%3C/svg%3E'"></td>
+                    <td><img src="${imgUrl}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2212%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESin foto%3C/text%3E%3C/svg%3E'"></td>
                     <td><strong>${auto.marca}</strong><br>${auto.modelo}</td>
                     <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
                     <td>${auto.año}</td>
@@ -751,14 +753,16 @@
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `;}).join('');
         }
 
         function renderAutosTable(list) {
             const tbody = document.getElementById('autos-table');
-            tbody.innerHTML = list.map(auto => `
+            tbody.innerHTML = list.map(auto => {
+                const imgUrl = auto.imagen ? (auto.imagen.startsWith('http') ? auto.imagen : `https://gonzalobergmans.pythonanywhere.com/${auto.imagen}`) : 'placeholder.jpg';
+                return `
                 <tr>
-                    <td><img src="${auto.imagen || 'placeholder.jpg'}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'"></td>
+                    <td><img src="${imgUrl}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'"></td>
                     <td><strong>${auto.marca}</strong><br>${auto.modelo}</td>
                     <td>${auto.versión}</td>
                     <td>${auto.año}</td>
