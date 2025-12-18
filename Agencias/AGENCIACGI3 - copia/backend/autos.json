@@ -75,7 +75,8 @@
       "categoria": "auto",
       "cero_km": false,
       "gnc": "no",
-      "whatsapp": "5493533431464"
+      "whatsapp": "5493533431464",
+      "recienLlegados": true
     },
     {
       "id": 3,
@@ -154,8 +155,8 @@
       "categoria": "utilitario",
       "cero_km": false,
       "gnc": "no",
-      "whatsapp": ""
-    },
+      "whatsapp": "",
+      "recienLlegado
     {
       "id": 5,
       "marca": "fiat",
@@ -191,7 +192,8 @@
       "categoria": "auto",
       "cero_km": false,
       "gnc": "no",
-      "whatsapp": ""
+      "whatsapp": "",
+      "recienLlegados": true
     },
     {
       "id": 6,
@@ -235,7 +237,7 @@
       "categoria": "auto",
       "cero_km": false,
       "gnc": "no",
-      "whatsapp": ""
-    }
+      "whatsapp": "",
+      "recienLlegado
   ]
 }
