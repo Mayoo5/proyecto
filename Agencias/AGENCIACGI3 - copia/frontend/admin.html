@@ -659,7 +659,7 @@
                     <div class="image-upload" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
                         <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #dc2626; margin-bottom: 10px;"></i>
                         <p style="margin-bottom: 5px; font-weight: 600;">Arrastra imágenes o haz clic</p>
-                        <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.gif,.webp" style="display: none;" onchange="handleFileSelect(event)">
+                        <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.gif,.webp,.heic,.hec" style="display: none;" onchange="handleFileSelect(event)">
                     </div>
                     <div class="image-preview-container" id="imagePreview"></div>
                 </div>
@@ -839,6 +839,7 @@
             document.getElementById('nuevo').checked = auto.nuevo || false;
             document.getElementById('destacado').checked = auto.destacado || false;
             document.getElementById('oferta').checked = auto.oferta || false;
+            document.getElementById('recienLlegados').checked = auto.recienLlegados || false;
             
             caracteristicas = auto.caracteristicas || [];
             updateCaracteristicasList();
@@ -873,6 +874,7 @@
                 nuevo: document.getElementById('nuevo').checked,
                 destacado: document.getElementById('destacado').checked,
                 oferta: document.getElementById('oferta').checked,
+                recienLlegados: document.getElementById('recienLlegados').checked,
                 caracteristicas: caracteristicas,
                 imagenes: selectedImages,
                 imagen: selectedImages[0] || ''

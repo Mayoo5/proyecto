@@ -1315,6 +1315,7 @@
                 document.getElementById('nuevo').checked = auto.nuevo || false;
                 document.getElementById('destacado').checked = auto.destacado || false;
                 document.getElementById('oferta').checked = auto.oferta || false;
+                document.getElementById('recienLlegados').checked = auto.recienLlegados || false;
                 
                 caracteristicas = auto.caracteristicas || [];
                 updateCaracteristicasList();
@@ -1352,6 +1353,7 @@
                 nuevo: document.getElementById('nuevo').checked,
                 destacado: document.getElementById('destacado').checked,
                 oferta: document.getElementById('oferta').checked,
+                recienLlegados: document.getElementById('recienLlegados').checked,
                 caracteristicas: caracteristicas,
                 imagenes: selectedImages,
                 imagen: selectedImages[0] || ''
