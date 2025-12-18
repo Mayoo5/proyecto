@@ -520,9 +520,10 @@ function filtrarPorTab(filtro) {
     } else if (filtro === 'oferta') {
         autosFiltrados = autos.filter(auto => auto.oferta === true);
     } else if (filtro === 'nuevo') {
+        // Buscar autos marcados como recienLlegados (nuevo campo del admin)
         autosFiltrados = autos.filter(auto => {
-            // Buscar autos marcados como nuevo O autos con kilometraje muy bajo
-            return auto.nuevo === true || 
+            return auto.recienLlegados === true || 
+                   auto.nuevo === true || 
                    (auto.kilometraje !== undefined && (auto.kilometraje === 0 || auto.kilometraje === '0' || auto.kilometraje < 100));
         });
     } else if (filtro === 'cero_km') {
