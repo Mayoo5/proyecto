@@ -3,12 +3,16 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from PIL import Image
+import pillow_heif
 import json
 import os
 from datetime import datetime
 import mimetypes
 import io
 import base64
+
+# Registrar el formato HEIC con PIL
+pillow_heif.register_heic_opener()
 
 # Obtener la ruta base del proyecto
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +27,7 @@ CORS(app)
 # Configuración
 UPLOAD_FOLDER = os.path.join(FRONTEND_DIR, 'fotos-autos')
 CLIENTES_FOLDER = os.path.join(FRONTEND_DIR, 'clientes-satisfechos')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'heic', 'hec'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -109,7 +113,7 @@ def compress_image(filepath, max_width=1200, max_height=1200, quality=85):
         # Redimensionar si es más grande
         img.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
         
-        # Guardar optimizada
+        # Guardar optimizada (siempre como JPEG para compatibilidad)
         img.save(filepath, 'JPEG', quality=quality, optimize=True)
         return True
     except Exception as e:
