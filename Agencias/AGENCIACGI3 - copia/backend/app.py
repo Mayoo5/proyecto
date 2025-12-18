@@ -3,16 +3,20 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from PIL import Image
-import pillow_heif
+
+# Intentar importar pillow_heif (opcional para HEIC/HEC support)
+try:
+    import pillow_heif
+    pillow_heif.register_heic_opener()
+except ImportError:
+    pass  # pillow_heif no está instalado, HEIC/HEC no serán soportados
+
 import json
 import os
 from datetime import datetime
 import mimetypes
 import io
 import base64
-
-# Registrar el formato HEIC con PIL
-pillow_heif.register_heic_opener()
 
 # Obtener la ruta base del proyecto
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
