@@ -463,6 +463,9 @@
             <section id="dashboard" class="section-content">
                 <div class="header">
                     <h1>Dashboard</h1>
+                    <button onclick="sincronizarAutos()" class="btn btn-primary" title="Guardar todos los autos en el servidor">
+                        <i class="fas fa-save"></i> Guardar Todo
+                    </button>
                 </div>
 
                 <div class="stats-grid">
@@ -816,6 +819,8 @@
 
         function closeAutoModal() {
             document.getElementById('autoModal').classList.remove('active');
+            // Guardar autos cuando se cierra el modal
+            sincronizarAutos();
         }
 
         // Editar
@@ -907,8 +912,8 @@
                         autos.push(autoData);
                     }
                     
-                    // Guardar también en localStorage como respaldo
-                    localStorage.setItem('autos', JSON.stringify(autos));
+                    // Sincronizar con servidor inmediatamente
+                    await sincronizarAutos();
                     
                     showToast(currentAutoId ? 'Auto actualizado ✓' : 'Auto creado ✓', 'success');
                     closeAutoModal();
@@ -1049,34 +1054,33 @@
             }
 
             try {
-                let exitosos = 0;
-                let errores = 0;
+                const response = await fetch('/api/guardar-todos-autos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ autos: autos })
+                });
 
-                for (const auto of autos) {
-                    try {
-                        const response = await fetch('/api/auto', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(auto)
-                        });
-
-                        if (response.ok) {
-                            exitosos++;
-                        } else {
-                            errores++;
-                        }
-                    } catch (error) {
-                        console.error('Error sincronizando auto:', error);
-                        errores++;
-                    }
+                if (response.ok) {
+                    const result = await response.json();
+                    showToast(`✓ ${result.mensaje}`, 'success');
+                    console.log('Autos guardados:', result);
+                } else {
+                    const error = await response.json();
+                    showToast(`Error: ${error.error}`, 'error');
                 }
-
-                showToast(`✓ Sincronizados ${exitosos}/${autos.length} autos`, exitosos === autos.length ? 'success' : 'warning');
             } catch (error) {
-                console.error('Error:', error);
-                showToast('Error al sincronizar', 'error');
+                console.error('Error sincronizando:', error);
+                showToast('Error al sincronizar: ' + error.message, 'error');
             }
         }
+
+        // Auto-guardar cada 30 segundos
+        setInterval(() => {
+            if (autos.length > 0 && document.visibilityState === 'visible') {
+                sincronizarAutos();
+                console.log('Auto-guardado completado');
+            }
+        }, 30000);
 
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('autoModal');

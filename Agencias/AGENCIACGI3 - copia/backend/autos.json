@@ -156,7 +156,8 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "",
-      "recienLlegado
+      "recienLlegados": true
+    },
     {
       "id": 5,
       "marca": "fiat",
@@ -238,6 +239,7 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "",
-      "recienLlegado
+      "recienLlegados": true
+    }
   ]
 }

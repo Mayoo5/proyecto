@@ -252,6 +252,22 @@ def delete_auto(auto_id):
     
     return jsonify({'success': True})
 
+@app.route('/api/guardar-todos-autos', methods=['POST'])
+def guardar_todos_autos():
+    """Recibe todos los autos desde el cliente y los guarda en autos.json"""
+    try:
+        autos_list = request.json.get('autos', [])
+        data = {'autos_ejemplo': autos_list}
+        save_autos_data(data)
+        return jsonify({
+            'success': True,
+            'total_autos': len(autos_list),
+            'mensaje': f'Se guardaron {len(autos_list)} autos correctamente'
+        }), 200
+    except Exception as e:
+        print(f"Error guardando autos: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/api/upload', methods=['POST'])
 def upload_image():
     """Carga una imagen"""
