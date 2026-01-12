@@ -24,6 +24,9 @@ FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BACKEND_DIR, 'templates')
 
+# Asegurar que autos.json existe en BACKEND_DIR (carpeta persistente)
+AUTOS_JSON_PATH = os.path.join(BACKEND_DIR, 'autos.json')
+
 app = Flask(__name__, template_folder=TEMPLATES_DIR, static_folder=os.path.join(FRONTEND_DIR), static_url_path='')
 app.secret_key = 'tu_clave_secreta_super_segura_cambiar_en_produccion'
 CORS(app)
@@ -50,13 +53,18 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_autos_data():
-    """Carga los datos de autos.json"""
+    """Carga los datos de autos.json desde carpeta persistente"""
     try:
-        autos_path = os.path.join(BACKEND_DIR, 'autos.json')
-        with open(autos_path, 'r', encoding='utf-8') as f:
+        with open(AUTOS_JSON_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
             return data
-    except:
+    except FileNotFoundError:
+        # Si no existe, crear archivo por defecto
+        default_data = {"autos_ejemplo": []}
+        save_autos_data(default_data)
+        return default_data
+    except Exception as e:
+        print(f"Error cargando autos.json: {e}")
         return {"autos_ejemplo": []}
 
 def get_users_data():
@@ -85,10 +93,13 @@ def save_users_data(data):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def save_autos_data(data):
-    """Guarda los datos en autos.json"""
-    autos_path = os.path.join(BACKEND_DIR, 'autos.json')
-    with open(autos_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    """Guarda los datos en autos.json (carpeta persistente)"""
+    try:
+        with open(AUTOS_JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        print(f"✓ Autos guardados en: {AUTOS_JSON_PATH}")
+    except Exception as e:
+        print(f"✗ Error guardando autos.json: {e}")
 
 def get_clientes_data():
     """Carga los datos de clientes"""
@@ -399,6 +410,18 @@ def delete_cliente(cliente_id):
         return jsonify({'success': True})
     
     return jsonify({'error': 'Cliente no encontrado'}), 404
+
+# Endpoint para forzar guardar todos los autos
+@app.route('/api/guardar-autos', methods=['POST'])
+def guardar_autos_endpoint():
+    """Fuerza el guardado de todos los autos actuales en autos.json"""
+    data = get_autos_data()
+    save_autos_data(data)
+    return jsonify({
+        'success': True, 
+        'total_autos': len(data.get('autos_ejemplo', [])),
+        'mensaje': f'Se guardaron {len(data.get("autos_ejemplo", []))} autos correctamente'
+    })
 
 @app.route('/clientes-satisfechos/<path:filename>')
 def serve_cliente_image(filename):

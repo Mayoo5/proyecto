@@ -508,9 +508,14 @@
             <section id="autos" class="section-content section-hidden">
                 <div class="header">
                     <h1>Gestión de Autos</h1>
-                    <button class="btn btn-primary" onclick="openNewAutoModal()">
-                        <i class="fas fa-plus"></i> Agregar Auto
-                    </button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="sincronizarAutos()" title="Guardar todos los autos en el servidor">
+                            <i class="fas fa-sync-alt"></i> Sincronizar
+                        </button>
+                        <button class="btn btn-primary" onclick="openNewAutoModal()">
+                            <i class="fas fa-plus"></i> Agregar Auto
+                        </button>
+                    </div>
                 </div>
 
                 <div class="table-container">
@@ -851,7 +856,7 @@
         }
 
         // Guardar
-        function saveAuto(e) {
+        async function saveAuto(e) {
             e.preventDefault();
             
             const autoData = {
@@ -880,28 +885,66 @@
                 imagen: selectedImages[0] || ''
             };
 
-            if (currentAutoId) {
-                const idx = autos.findIndex(a => a.id === currentAutoId);
-                autos[idx] = autoData;
-            } else {
-                autos.push(autoData);
-            }
+            try {
+                // Guardar en servidor
+                const url = currentAutoId 
+                    ? `/api/auto/${currentAutoId}` 
+                    : '/api/auto';
+                const method = currentAutoId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(autoData)
+                });
 
-            localStorage.setItem('autos', JSON.stringify(autos));
-            showToast(currentAutoId ? 'Auto actualizado ✓' : 'Auto creado ✓', 'success');
-            closeAutoModal();
-            loadAutos();
-            loadDashboard();
+                if (response.ok) {
+                    // Actualizar array local
+                    if (currentAutoId) {
+                        const idx = autos.findIndex(a => a.id === currentAutoId);
+                        autos[idx] = autoData;
+                    } else {
+                        autos.push(autoData);
+                    }
+                    
+                    // Guardar también en localStorage como respaldo
+                    localStorage.setItem('autos', JSON.stringify(autos));
+                    
+                    showToast(currentAutoId ? 'Auto actualizado ✓' : 'Auto creado ✓', 'success');
+                    closeAutoModal();
+                    loadAutos();
+                    loadDashboard();
+                } else {
+                    showToast('Error al guardar el auto', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error de conexión', 'error');
+            }
         }
 
         // Eliminar
-        function deleteAuto(autoId) {
+        async function deleteAuto(autoId) {
             if (!confirm('¿Estás seguro de que deseas eliminar este auto?')) return;
-            autos = autos.filter(a => a.id !== autoId);
-            localStorage.setItem('autos', JSON.stringify(autos));
-            showToast('Auto eliminado ✓', 'success');
-            loadAutos();
-            loadDashboard();
+            
+            try {
+                const response = await fetch(`/api/auto/${autoId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    autos = autos.filter(a => a.id !== autoId);
+                    localStorage.setItem('autos', JSON.stringify(autos));
+                    showToast('Auto eliminado ✓', 'success');
+                    loadAutos();
+                    loadDashboard();
+                } else {
+                    showToast('Error al eliminar el auto', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error de conexión', 'error');
+            }
         }
 
         // Características
@@ -996,6 +1039,43 @@
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Sincronizar todos los autos con el servidor
+        async function sincronizarAutos() {
+            if (autos.length === 0) {
+                showToast('No hay autos para sincronizar', 'warning');
+                return;
+            }
+
+            try {
+                let exitosos = 0;
+                let errores = 0;
+
+                for (const auto of autos) {
+                    try {
+                        const response = await fetch('/api/auto', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(auto)
+                        });
+
+                        if (response.ok) {
+                            exitosos++;
+                        } else {
+                            errores++;
+                        }
+                    } catch (error) {
+                        console.error('Error sincronizando auto:', error);
+                        errores++;
+                    }
+                }
+
+                showToast(`✓ Sincronizados ${exitosos}/${autos.length} autos`, exitosos === autos.length ? 'success' : 'warning');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error al sincronizar', 'error');
+            }
         }
 
         document.addEventListener('click', (e) => {
