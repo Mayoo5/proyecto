@@ -6,7 +6,7 @@ from PIL import Image
 
 # Intentar importar pillow_heif (opcional para HEIC/HEC support)
 try:
-    import pillow_heif
+    import pillow_heif  # type: ignore
     pillow_heif.register_heic_opener()
 except ImportError:
     pass  # pillow_heif no está instalado, HEIC/HEC no serán soportados
