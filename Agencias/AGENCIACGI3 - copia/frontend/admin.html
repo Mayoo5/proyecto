@@ -526,11 +526,11 @@
                         <thead>
                             <tr>
                                 <th>Imagen</th>
-                                <th>Marca / Modelo</th>
-                                <th>Versión</th>
-                                <th>Año</th>
-                                <th>Precio</th>
-                                <th>KM</th>
+                                <th onclick="sortAutos('marca')" style="cursor: pointer;">Marca / Modelo <i class="fas fa-sort"></i></th>
+                                <th onclick="sortAutos('version')" style="cursor: pointer;">Versión <i class="fas fa-sort"></i></th>
+                                <th onclick="sortAutos('año')" style="cursor: pointer;">Año <i class="fas fa-sort"></i></th>
+                                <th onclick="sortAutos('precio')" style="cursor: pointer;">Precio <i class="fas fa-sort"></i></th>
+                                <th onclick="sortAutos('kilometraje')" style="cursor: pointer;">KM <i class="fas fa-sort"></i></th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -723,6 +723,7 @@
         let currentAutoId = null;
         let selectedImages = [];
         let caracteristicas = [];
+        let sortConfig = { field: null, order: 'asc' }; // Configuración de ordenamiento
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
@@ -731,6 +732,39 @@
         });
 
         // Cargar desde autos.json (simulado)
+        function sortAutos(field) {
+            // Si hacemos click en el mismo campo, invertir orden
+            if (sortConfig.field === field) {
+                sortConfig.order = sortConfig.order === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.field = field;
+                sortConfig.order = 'asc';
+            }
+
+            const sorted = [...autos].sort((a, b) => {
+                let valueA = a[field];
+                let valueB = b[field];
+
+                // Convertir a lowercase para comparación de strings
+                if (typeof valueA === 'string') {
+                    valueA = valueA.toLowerCase();
+                    valueB = valueB.toLowerCase();
+                }
+
+                // Comparar según el tipo
+                let comparison = 0;
+                if (valueA < valueB) {
+                    comparison = -1;
+                } else if (valueA > valueB) {
+                    comparison = 1;
+                }
+
+                return sortConfig.order === 'asc' ? comparison : -comparison;
+            });
+
+            renderAutosTable(sorted);
+        }
+
         function loadAutos() {
             // Intenta cargar desde localStorage primero, luego desde autos.json
             const saved = localStorage.getItem('autos');
