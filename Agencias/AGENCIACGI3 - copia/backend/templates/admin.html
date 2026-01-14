@@ -1161,6 +1161,7 @@
         let currentAutoId = null;
         let selectedImages = [];
         let caracteristicas = [];
+        let autos = [];  // Variable global para almacenar autos
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
@@ -1223,7 +1224,7 @@
         async function loadAutos() {
             try {
                 const response = await fetch('/api/autos');
-                const autos = await response.json();
+                autos = await response.json();  // Guardar en variable global
                 renderAutosTable(autos);
             } catch (error) {
                 showToast('Error cargando autos', 'error');
