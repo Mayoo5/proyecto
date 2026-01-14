@@ -161,6 +161,17 @@
             color: #374151;
             font-size: 13px;
             text-transform: uppercase;
+            user-select: none;
+        }
+
+        th[onclick*="sortAutos"] {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #e5e7eb;
+        }
+
+        th[onclick*="sortAutos"]:hover {
+            background: #d1d5db;
         }
 
         td {
@@ -731,14 +742,15 @@
             loadDashboard();
         });
 
-        // Cargar desde autos.json (simulado)
+        // Ordenamiento de autos
         function sortAutos(field) {
             // Si hacemos click en el mismo campo, invertir orden
             if (sortConfig.field === field) {
                 sortConfig.order = sortConfig.order === 'asc' ? 'desc' : 'asc';
             } else {
                 sortConfig.field = field;
-                sortConfig.order = 'asc';
+                // Por defecto: texto alfabético (asc), números de mayor a menor (desc)
+                sortConfig.order = (field === 'año' || field === 'precio' || field === 'kilometraje') ? 'desc' : 'asc';
             }
 
             const sorted = [...autos].sort((a, b) => {
@@ -763,6 +775,27 @@
             });
 
             renderAutosTable(sorted);
+            updateSortIndicators();
+        }
+
+        // Actualizar indicadores visuales de ordenamiento
+        function updateSortIndicators() {
+            const headers = document.querySelectorAll('thead th[onclick*="sortAutos"]');
+            headers.forEach(header => {
+                const fieldMatch = header.getAttribute('onclick').match(/sortAutos\('(\w+)'\)/);
+                if (!fieldMatch) return;
+                
+                const field = fieldMatch[1];
+                let indicator = '';
+                
+                if (sortConfig.field === field) {
+                    indicator = sortConfig.order === 'asc' ? ' ▲' : ' ▼';
+                }
+                
+                // Actualizar el contenido del header
+                const content = header.innerHTML.replace(/ ▲| ▼/g, '');
+                header.innerHTML = content + indicator;
+            });
         }
 
         // Cargar autos desde el servidor
@@ -837,6 +870,9 @@
                     </td>
                 </tr>
             `).join('');
+            
+            // Actualizar indicadores de ordenamiento
+            updateSortIndicators();
         }
 
         // Secciones
