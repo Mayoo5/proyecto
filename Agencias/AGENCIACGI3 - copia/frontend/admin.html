@@ -765,41 +765,54 @@
             renderAutosTable(sorted);
         }
 
-        function loadAutos() {
-            // Intenta cargar desde localStorage primero, luego desde autos.json
-            const saved = localStorage.getItem('autos');
-            if (saved) {
-                autos = JSON.parse(saved);
-            } else {
-                // Datos de ejemplo
+        // Cargar autos desde el servidor
+        async function loadAutos() {
+            try {
+                const response = await fetch('/api/autos');
+                if (response.ok) {
+                    const data = await response.json();
+                    // La API devuelve autos_ejemplo array
+                    autos = Array.isArray(data) ? data : (data.autos_ejemplo || []);
+                    renderAutosTable(autos);
+                } else {
+                    showToast('Error al cargar autos del servidor', 'error');
+                    autos = [];
+                    renderAutosTable(autos);
+                }
+            } catch (error) {
+                console.error('Error cargando autos:', error);
+                showToast('Error de conexión al cargar autos', 'error');
                 autos = [];
+                renderAutosTable(autos);
             }
-            renderAutosTable(autos);
         }
 
         function loadDashboard() {
-            document.getElementById('total-autos').textContent = autos.length;
-            document.getElementById('autos-oferta').textContent = autos.filter(a => a.oferta).length;
-            document.getElementById('autos-nuevos').textContent = autos.filter(a => a.nuevo).length;
-            document.getElementById('autos-destacados').textContent = autos.filter(a => a.destacado).length;
+            // Asegurarse de tener datos frescos
+            loadAutos().then(() => {
+                document.getElementById('total-autos').textContent = autos.length;
+                document.getElementById('autos-oferta').textContent = autos.filter(a => a.oferta).length;
+                document.getElementById('autos-nuevos').textContent = autos.filter(a => a.nuevo).length;
+                document.getElementById('autos-destacados').textContent = autos.filter(a => a.destacado).length;
 
-            const recent = autos.slice(-5).reverse();
-            const tbody = document.getElementById('recent-autos');
-            tbody.innerHTML = recent.map(auto => {
-                const imgUrl = auto.imagen ? (auto.imagen.startsWith('http') ? auto.imagen : `https://gonzalobergmans.pythonanywhere.com/${auto.imagen}`) : 'placeholder.jpg';
-                return `
-                <tr>
-                    <td><img src="${imgUrl}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2212%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESin foto%3C/text%3E%3C/svg%3E'"></td>
-                    <td><strong>${auto.marca}</strong><br>${auto.modelo}</td>
-                    <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
-                    <td>${auto.año}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-small" onclick="editAuto(${auto.id})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;}).join('');
+                const recent = autos.slice(-5).reverse();
+                const tbody = document.getElementById('recent-autos');
+                tbody.innerHTML = recent.map(auto => {
+                    const imgUrl = auto.imagen ? (auto.imagen.startsWith('http') ? auto.imagen : `https://gonzalobergmans.pythonanywhere.com/${auto.imagen}`) : 'placeholder.jpg';
+                    return `
+                    <tr>
+                        <td><img src="${imgUrl}" alt="${auto.marca}" class="img-thumbnail" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2212%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESin foto%3C/text%3E%3C/svg%3E'"></td>
+                        <td><strong>${auto.marca}</strong><br>${auto.modelo}</td>
+                        <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
+                        <td>${auto.año}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-small" onclick="editAuto(${auto.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;}).join('');
+            });
         }
 
         function renderAutosTable(list) {
@@ -946,6 +959,9 @@
                         autos.push(autoData);
                     }
                     
+                    // Marcar como cambio para sincronizar
+                    hasChanges = true;
+                    
                     // Sincronizar con servidor inmediatamente
                     await sincronizarAutos();
                     
@@ -973,7 +989,6 @@
 
                 if (response.ok) {
                     autos = autos.filter(a => a.id !== autoId);
-                    localStorage.setItem('autos', JSON.stringify(autos));
                     showToast('Auto eliminado ✓', 'success');
                     loadAutos();
                     loadDashboard();
@@ -1108,13 +1123,22 @@
             }
         }
 
-        // Auto-guardar cada 30 segundos
+        // Auto-guardar cada 15 segundos si hay cambios
+        let lastSyncTime = 0;
+        let hasChanges = false;
+        
         setInterval(() => {
-            if (autos.length > 0 && document.visibilityState === 'visible') {
-                sincronizarAutos();
-                console.log('Auto-guardado completado');
+            if (hasChanges && autos.length > 0 && document.visibilityState === 'visible') {
+                const now = Date.now();
+                // Solo sincronizar si ha pasado más de 15 segundos desde la última sincronización
+                if (now - lastSyncTime > 15000) {
+                    sincronizarAutos();
+                    lastSyncTime = now;
+                    hasChanges = false;
+                    console.log('Auto-guardado completado');
+                }
             }
-        }, 30000);
+        }, 5000);
 
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('autoModal');
