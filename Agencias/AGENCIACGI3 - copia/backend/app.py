@@ -219,6 +219,33 @@ def create_auto():
     new_auto['id'] = new_id
     new_auto['imagenes'] = new_auto.get('imagenes', [])
     
+    # Renombrar imágenes temporales a usar el ID real del auto
+    imagenes_finales = []
+    for img_path in new_auto.get('imagenes', []):
+        if img_path and img_path.startswith('fotos-autos/') and '_temp_' in img_path:
+            # Renombrar archivo temporal a usar el ID real
+            old_filename = img_path.replace('fotos-autos/', '')
+            new_filename = old_filename.replace('_temp_', f'_{new_id}_')
+            
+            old_path = os.path.join(UPLOAD_FOLDER, old_filename)
+            new_path = os.path.join(UPLOAD_FOLDER, new_filename)
+            
+            try:
+                if os.path.exists(old_path):
+                    os.rename(old_path, new_path)
+                    imagenes_finales.append(f'fotos-autos/{new_filename}')
+                    print(f"✓ Imagen renombrada: {old_filename} → {new_filename}")
+                else:
+                    imagenes_finales.append(img_path)
+            except Exception as e:
+                print(f"Error renombrando imagen: {e}")
+                imagenes_finales.append(img_path)
+        else:
+            imagenes_finales.append(img_path)
+    
+    new_auto['imagenes'] = imagenes_finales
+    new_auto['imagen'] = imagenes_finales[0] if imagenes_finales else ''
+    
     autos.append(new_auto)
     data['autos_ejemplo'] = autos
     save_autos_data(data)
@@ -227,13 +254,42 @@ def create_auto():
 
 @app.route('/api/auto/<int:auto_id>', methods=['PUT'])
 def update_auto(auto_id):
-    """Actualiza un auto existente"""
+    """Actualiza un auto existente y renombra imágenes temporales si es necesario"""
     data = get_autos_data()
     autos = data.get('autos_ejemplo', [])
     
     for i, auto in enumerate(autos):
         if auto.get('id') == auto_id:
-            autos[i].update(request.json)
+            updated_data = request.json
+            
+            # Procesar imágenes: renombrar las temporales si existen
+            imagenes_finales = []
+            for img_path in updated_data.get('imagenes', []):
+                if img_path and img_path.startswith('fotos-autos/') and '_temp_' in img_path:
+                    # Renombrar archivo temporal a usar el ID real
+                    old_filename = img_path.replace('fotos-autos/', '')
+                    new_filename = old_filename.replace('_temp_', f'_{auto_id}_', 1)
+                    
+                    old_path = os.path.join(UPLOAD_FOLDER, old_filename)
+                    new_path = os.path.join(UPLOAD_FOLDER, new_filename)
+                    
+                    try:
+                        if os.path.exists(old_path):
+                            os.rename(old_path, new_path)
+                            imagenes_finales.append(f'fotos-autos/{new_filename}')
+                            print(f"✓ Imagen renombrada en update: {old_filename} → {new_filename}")
+                        else:
+                            imagenes_finales.append(img_path)
+                    except Exception as e:
+                        print(f"Error renombrando imagen en update: {e}")
+                        imagenes_finales.append(img_path)
+                else:
+                    imagenes_finales.append(img_path)
+            
+            updated_data['imagenes'] = imagenes_finales
+            updated_data['imagen'] = imagenes_finales[0] if imagenes_finales else ''
+            
+            autos[i].update(updated_data)
             data['autos_ejemplo'] = autos
             save_autos_data(data)
             return jsonify(autos[i])
@@ -270,7 +326,7 @@ def guardar_todos_autos():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_image():
-    """Carga una imagen"""
+    """Carga una imagen con ID temporal si el auto aún no se ha guardado"""
     print("=== INICIO UPLOAD ===")
     print(f"UPLOAD_FOLDER: {app.config['UPLOAD_FOLDER']}")
     print(f"Carpeta existe: {os.path.exists(app.config['UPLOAD_FOLDER'])}")
@@ -290,9 +346,15 @@ def upload_image():
         return jsonify({'error': 'Tipo de archivo no permitido'}), 400
     
     # Generar nombre seguro con timestamp
+    # Si auto_id es 'temp', usamos '_temp_' en el nombre para poder renombrar después
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     ext = file.filename.rsplit('.', 1)[1].lower()
-    filename = f"{auto_id}_{timestamp}_01.{ext}"
+    
+    # Usar '_temp_' como separador para identificar imágenes temporales
+    if auto_id == 'temp':
+        filename = f"0_temp_{timestamp}_01.{ext}"
+    else:
+        filename = f"{auto_id}_{timestamp}_01.{ext}"
     
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     print(f"Guardando en: {filepath}")
