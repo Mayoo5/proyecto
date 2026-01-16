@@ -208,53 +208,60 @@ def get_auto(auto_id):
 
 @app.route('/api/auto', methods=['POST'])
 def create_auto():
-    """Crea un nuevo auto"""
+    """Crea un nuevo auto - SIN temporales, guardado directo y permanente"""
     data = get_autos_data()
     autos = data.get('autos_ejemplo', [])
     
     new_auto = request.json
     
-    # Generar nuevo ID
+    # Generar nuevo ID PRIMERO (antes de procesar imágenes)
     new_id = max([auto.get('id', 0) for auto in autos], default=0) + 1
     new_auto['id'] = new_id
     new_auto['imagenes'] = new_auto.get('imagenes', [])
     
-    # Renombrar imágenes temporales a usar el ID real del auto
+    # Procesar imágenes - renombrar sin usar temporales
     imagenes_finales = []
     for img_path in new_auto.get('imagenes', []):
-        if img_path and img_path.startswith('fotos-autos/') and '_temp_' in img_path:
-            # Renombrar archivo temporal a usar el ID real
+        if img_path and img_path.startswith('fotos-autos/'):
+            # Obtener nombre del archivo
             old_filename = img_path.replace('fotos-autos/', '')
-            new_filename = old_filename.replace('_temp_', f'_{new_id}_')
+            
+            # Si aún tiene _temp_, renombrarlo con el ID real
+            if '_temp_' in old_filename:
+                new_filename = old_filename.replace('_temp_', f'{new_id}_', 1)
+            else:
+                # Si ya no tiene _temp_, simplemente usar como está
+                new_filename = old_filename
             
             old_path = os.path.join(UPLOAD_FOLDER, old_filename)
             new_path = os.path.join(UPLOAD_FOLDER, new_filename)
             
             try:
-                if os.path.exists(old_path):
+                if os.path.exists(old_path) and old_path != new_path:
                     os.rename(old_path, new_path)
-                    imagenes_finales.append(f'fotos-autos/{new_filename}')
-                    print(f"✓ Imagen renombrada: {old_filename} → {new_filename}")
-                else:
-                    imagenes_finales.append(img_path)
+                    print(f"✓ Imagen guardada permanentemente: {new_filename}")
+                
+                imagenes_finales.append(f'fotos-autos/{new_filename}')
             except Exception as e:
-                print(f"Error renombrando imagen: {e}")
-                imagenes_finales.append(img_path)
+                print(f"Error procesando imagen: {e}")
+                imagenes_finales.append(f'fotos-autos/{new_filename}')
         else:
             imagenes_finales.append(img_path)
     
     new_auto['imagenes'] = imagenes_finales
     new_auto['imagen'] = imagenes_finales[0] if imagenes_finales else ''
     
+    # GUARDAR INMEDIATAMENTE EN autos.json
     autos.append(new_auto)
     data['autos_ejemplo'] = autos
     save_autos_data(data)
     
+    print(f"✅ Auto #{new_id} guardado permanentemente en autos.json")
     return jsonify(new_auto), 201
 
 @app.route('/api/auto/<int:auto_id>', methods=['PUT'])
 def update_auto(auto_id):
-    """Actualiza un auto existente y renombra imágenes temporales si es necesario"""
+    """Actualiza un auto existente - SIN temporales, guardado directo"""
     data = get_autos_data()
     autos = data.get('autos_ejemplo', [])
     
@@ -262,37 +269,48 @@ def update_auto(auto_id):
         if auto.get('id') == auto_id:
             updated_data = request.json
             
-            # Procesar imágenes: renombrar las temporales si existen
+            # Procesar imágenes - sin usar temporales
             imagenes_finales = []
             for img_path in updated_data.get('imagenes', []):
-                if img_path and img_path.startswith('fotos-autos/') and '_temp_' in img_path:
-                    # Renombrar archivo temporal a usar el ID real
+                if img_path and img_path.startswith('fotos-autos/'):
+                    # Obtener nombre del archivo
                     old_filename = img_path.replace('fotos-autos/', '')
-                    new_filename = old_filename.replace('_temp_', f'_{auto_id}_', 1)
+                    
+                    # Si aún tiene _temp_, renombrarlo con el ID real
+                    if '_temp_' in old_filename:
+                        new_filename = old_filename.replace('_temp_', f'{auto_id}_', 1)
+                    else:
+                        # Si ya no tiene _temp_, simplemente usar como está
+                        new_filename = old_filename
                     
                     old_path = os.path.join(UPLOAD_FOLDER, old_filename)
                     new_path = os.path.join(UPLOAD_FOLDER, new_filename)
                     
                     try:
-                        if os.path.exists(old_path):
+                        if os.path.exists(old_path) and old_path != new_path:
                             os.rename(old_path, new_path)
-                            imagenes_finales.append(f'fotos-autos/{new_filename}')
-                            print(f"✓ Imagen renombrada en update: {old_filename} → {new_filename}")
-                        else:
-                            imagenes_finales.append(img_path)
+                            print(f"✓ Imagen guardada permanentemente en update: {new_filename}")
+                        
+                        imagenes_finales.append(f'fotos-autos/{new_filename}')
                     except Exception as e:
-                        print(f"Error renombrando imagen en update: {e}")
-                        imagenes_finales.append(img_path)
+                        print(f"Error procesando imagen en update: {e}")
+                        imagenes_finales.append(f'fotos-autos/{new_filename}')
                 else:
                     imagenes_finales.append(img_path)
             
-            updated_data['imagenes'] = imagenes_finales
-            updated_data['imagen'] = imagenes_finales[0] if imagenes_finales else ''
-            
+            # Actualizar datos del auto
             autos[i].update(updated_data)
+            autos[i]['imagenes'] = imagenes_finales
+            autos[i]['imagen'] = imagenes_finales[0] if imagenes_finales else autos[i].get('imagen', '')
+            
+            # GUARDAR INMEDIATAMENTE EN autos.json
             data['autos_ejemplo'] = autos
             save_autos_data(data)
-            return jsonify(autos[i])
+            
+            print(f"✅ Auto #{auto_id} actualizado permanentemente en autos.json")
+            return jsonify(autos[i]), 200
+    
+    return jsonify({'error': 'Auto no encontrado'}), 404
     
     return jsonify({'error': 'Auto no encontrado'}), 404
 
