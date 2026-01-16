@@ -1808,8 +1808,6 @@
         }
 
         // ============= CLIENTES SATISFECHOS =============
-        let clientes = [];
-        let clienteImageFile = null;
 
         function loadClientes() {
             fetch(`${API_BASE}/api/clientes-gallery`)
@@ -1989,47 +1987,6 @@
                 console.error('Error:', error);
                 alert('❌ Error al guardar horarios');
             });
-        }
-
-        function loadConfigSettings() {
-            // Cargar banner configurado
-            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/banner')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.banner_text) {
-                        document.getElementById('bannerText').value = data.banner_text;
-                    }
-                })
-                .catch(error => console.log('Banner config no disponible'));
-
-            // Cargar horarios configurados
-            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/whatsapp-schedule')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.schedule) {
-                        const schedule = data.schedule;
-                        
-                        const isEnabled = schedule.enabled;
-                        document.querySelector(`input[name="whatsappEnabled"][value="${isEnabled}"]`).checked = true;
-                        document.getElementById('scheduleContainer').style.display = isEnabled ? 'block' : 'none';
-
-                        Object.keys(schedule.days).forEach(day => {
-                            const dayData = schedule.days[day];
-                            document.getElementById(day + '_active').checked = dayData.active;
-                            document.getElementById(day + '_from').value = dayData.from;
-                            document.getElementById(day + '_to').value = dayData.to;
-                        });
-                    }
-                })
-                .catch(error => console.log('Schedule config no disponible'));
-        }
-
-        function updateBannerInFrontend(text) {
-            // Actualizar el banner en la página principal sin recargar
-            const bannerElement = document.querySelector('.hero-section h1');
-            if (bannerElement) {
-                bannerElement.textContent = text;
-            }
         }
 
         // Cargar clientes al iniciar
