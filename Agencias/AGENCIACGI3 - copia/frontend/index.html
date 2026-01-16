@@ -127,33 +127,24 @@
                     </div>
                 </div>
                 
-                <div class="hero-stats-modern hide-mobile">
-                    <div class="stat-card-modern">
-                        <div class="stat-icon">
-                            <i class="fas fa-car-side"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number-modern">+5000</div>
-                            <div class="stat-label-modern">Vehículos Vendidos</div>
+                <div class="hero-carousel hide-mobile">
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Los slides se cargarán dinámicamente aquí -->
                         </div>
                     </div>
-                    <div class="stat-card-modern" onclick="openClientsModal()" style="cursor: pointer;">
-                        <div class="stat-icon">
-                            <i class="fas fa-smile"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number-modern">95%</div>
-                            <div class="stat-label-modern">Clientes Satisfechos</div>
-                        </div>
-                    </div>
-                    <div class="stat-card-modern">
-                        <div class="stat-icon">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-number-modern">20+</div>
-                            <div class="stat-label-modern">Años de Experiencia</div>
-                        </div>
+                    
+                    <!-- Controles del carrusel -->
+                    <button class="carousel-nav carousel-prev" onclick="carouselPrev()" aria-label="Cliente anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav carousel-next" onclick="carouselNext()" aria-label="Siguiente cliente">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <!-- Indicadores -->
+                    <div class="carousel-dots" id="carouselDots">
+                        <!-- Los dots se cargarán dinámicamente aquí -->
                     </div>
                 </div>
             </div>

@@ -509,5 +509,34 @@ def serve_cliente_image(filename):
     except:
         return jsonify({'error': 'Imagen no encontrada'}), 404
 
+@app.route('/api/carousel-images', methods=['GET'])
+def get_carousel_images():
+    """Obtiene lista de imágenes de clientes satisfechos para el carrusel del hero"""
+    try:
+        if not os.path.exists(CLIENTES_FOLDER):
+            return jsonify({'images': []})
+        
+        # Obtener lista de archivos de imagen
+        image_files = []
+        valid_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+        
+        for filename in sorted(os.listdir(CLIENTES_FOLDER)):
+            file_ext = os.path.splitext(filename)[1].lower()
+            if file_ext in valid_extensions:
+                # Retornar ruta relativa para que funcione en frontend
+                image_files.append({
+                    'url': f'clientes-satisfechos/{filename}',
+                    'name': filename
+                })
+        
+        return jsonify({
+            'success': True,
+            'images': image_files,
+            'total': len(image_files)
+        })
+    except Exception as e:
+        print(f"Error obteniendo imágenes del carrusel: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')

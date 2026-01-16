@@ -1262,3 +1262,140 @@ window.CGIAutos = {
     updateAutoCount,
     isMobile
 };
+
+/* ============================================
+   CARRUSEL DE IMÁGENES - HERO SECTION
+   ============================================ */
+
+let currentSlide = 0;
+let totalSlides = 0;
+let autoPlayInterval;
+let carouselImages = [];
+
+async function loadCarouselImages() {
+    try {
+        const response = await fetch('https://gonzalobergmans.pythonanywhere.com/api/carousel-images');
+        if (response.ok) {
+            const data = await response.json();
+            carouselImages = data.images || [];
+            totalSlides = carouselImages.length;
+            
+            if (totalSlides > 0) {
+                renderCarouselSlides();
+                updateCarousel();
+                startAutoPlay();
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando imágenes del carrusel:', error);
+    }
+}
+
+function renderCarouselSlides() {
+    const track = document.querySelector('#carouselTrack');
+    const dotsContainer = document.querySelector('#carouselDots');
+    
+    if (!track || !dotsContainer) return;
+    
+    // Limpiar contenido previo
+    track.innerHTML = '';
+    dotsContainer.innerHTML = '';
+    
+    // Crear slides
+    carouselImages.forEach((img, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.innerHTML = `<img src="${img.url}" alt="Cliente satisfecho CGI Autos ${index + 1}" class="carousel-image">`;
+        track.appendChild(slide);
+    });
+    
+    // Crear dots
+    carouselImages.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.setAttribute('aria-label', `Cliente ${index + 1}`);
+        dot.onclick = () => carouselGoTo(index);
+        dotsContainer.appendChild(dot);
+    });
+    
+    // Marcar primer dot como activo
+    if (dotsContainer.children.length > 0) {
+        dotsContainer.children[0].classList.add('active');
+    }
+}
+
+function updateCarousel() {
+    const track = document.querySelector('#carouselTrack');
+    if (!track) return;
+    
+    // Desplazar la pista
+    const offset = -currentSlide * 100;
+    track.style.transform = `translateX(${offset}%)`;
+    
+    // Actualizar indicadores
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function updateCarousel() {
+    const track = document.querySelector('.carousel-track');
+    if (!track) return;
+    
+    // Desplazar la pista
+    const offset = -currentSlide * 100;
+    track.style.transform = `translateX(${offset}%)`;
+    
+    // Actualizar indicadores
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function carouselNext() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+    resetAutoPlay();
+}
+
+function carouselPrev() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+    resetAutoPlay();
+}
+
+function carouselGoTo(index) {
+    currentSlide = index;
+    updateCarousel();
+    resetAutoPlay();
+}
+
+function resetAutoPlay() {
+    clearInterval(autoPlayInterval);
+    startAutoPlay();
+}
+
+function startAutoPlay() {
+    autoPlayInterval = setInterval(() => {
+        carouselNext();
+    }, 5000); // Cambiar cada 5 segundos
+}
+
+// Inicializar carrusel cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('.hero-carousel');
+    if (carousel) {
+        // Cargar imágenes dinámicamente desde el servidor
+        loadCarouselImages();
+        
+        // Pausar autoplay cuando el usuario interactúa
+        carousel.addEventListener('mouseenter', () => {
+            clearInterval(autoPlayInterval);
+        });
+        
+        // Reanudar autoplay cuando el mouse sale
+        carousel.addEventListener('mouseleave', () => {
+            startAutoPlay();
+        });
+    }
+});
