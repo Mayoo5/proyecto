@@ -55,16 +55,21 @@ def allowed_file(filename):
 def get_autos_data():
     """Carga los datos de autos.json desde carpeta persistente"""
     try:
+        print(f"[DEBUG] Intentando cargar autos.json desde: {AUTOS_JSON_PATH}")
+        print(f"[DEBUG] ¿Existe el archivo? {os.path.exists(AUTOS_JSON_PATH)}")
+        
         with open(AUTOS_JSON_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
+            print(f"[DEBUG] Datos cargados exitosamente. Keys: {data.keys()}")
             return data
     except FileNotFoundError:
+        print(f"[ERROR] Archivo no encontrado: {AUTOS_JSON_PATH}")
         # Si no existe, crear archivo por defecto
         default_data = {"autos_ejemplo": []}
         save_autos_data(default_data)
         return default_data
     except Exception as e:
-        print(f"Error cargando autos.json: {e}")
+        print(f"[ERROR] Error cargando autos.json: {e}")
         return {"autos_ejemplo": []}
 
 def get_users_data():
@@ -105,9 +110,18 @@ def get_clientes_data():
     """Carga los datos de clientes"""
     try:
         clientes_path = os.path.join(BACKEND_DIR, 'clientes.json')
+        print(f"[DEBUG] Intentando cargar clientes.json desde: {clientes_path}")
+        print(f"[DEBUG] ¿Existe el archivo? {os.path.exists(clientes_path)}")
+        
         with open(clientes_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except:
+            data = json.load(f)
+            print(f"[DEBUG] Clientes cargados exitosamente. Keys: {data.keys()}")
+            return data
+    except FileNotFoundError:
+        print(f"[ERROR] Archivo no encontrado: clientes.json")
+        return {"clientes": []}
+    except Exception as e:
+        print(f"[ERROR] Error cargando clientes.json: {e}")
         return {"clientes": []}
 
 def save_clientes_data(data):
@@ -194,10 +208,15 @@ def clientes_page():
 @app.route('/api/autos', methods=['GET'])
 def get_autos():
     """Obtiene lista de autos"""
-    data = get_autos_data()
-    # Si tiene 'autos_ejemplo', usar eso; si no, devolver vacío
-    autos = data.get('autos_ejemplo', data.get('autos', []))
-    return jsonify(autos)
+    try:
+        data = get_autos_data()
+        # Si tiene 'autos_ejemplo', usar eso; si no, devolver vacío
+        autos = data.get('autos_ejemplo', data.get('autos', []))
+        print(f"[API] GET /api/autos - Retornando {len(autos)} autos")
+        return jsonify(autos)
+    except Exception as e:
+        print(f"[ERROR] GET /api/autos - {str(e)}")
+        return jsonify([]), 500
 
 @app.route('/api/auto/<int:auto_id>', methods=['GET'])
 def get_auto(auto_id):
@@ -430,9 +449,14 @@ def get_clientes():
 @app.route('/api/clientes-gallery', methods=['GET'])
 def get_clientes_gallery():
     """Obtiene galería de clientes para la web pública"""
-    data = get_clientes_data()
-    clientes = [{'imagen': cliente['imagen']} for cliente in data.get('clientes', [])]
-    return jsonify({'clientes': clientes})
+    try:
+        data = get_clientes_data()
+        clientes = [{'imagen': cliente['imagen']} for cliente in data.get('clientes', [])]
+        print(f"[API] GET /api/clientes-gallery - Retornando {len(clientes)} clientes")
+        return jsonify({'clientes': clientes})
+    except Exception as e:
+        print(f"[ERROR] GET /api/clientes-gallery - {str(e)}")
+        return jsonify({'clientes': []}), 500
 
 @app.route('/api/cliente', methods=['POST'])
 def add_cliente():
