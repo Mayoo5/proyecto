@@ -165,12 +165,8 @@ def check_login():
     """Verifica si el usuario está logeado"""
     if request.path.startswith('/api/'):
         # Permitir GET a endpoints públicos sin autenticación
-        if request.path in ['/api/autos', '/api/clientes-gallery', '/api/carousel-images', '/api/config/banner', '/api/config/whatsapp-schedule'] and request.method == 'GET':
+        if request.path in ['/api/autos', '/api/clientes-gallery', '/api/carousel-images'] and request.method == 'GET':
             return None
-        # POST a config requiere autenticación
-        if request.path in ['/api/config/banner', '/api/config/whatsapp-schedule'] and request.method == 'POST':
-            if not session.get('logged_in'):
-                return jsonify({'error': 'No autenticado'}), 401
         # Resto de APIs requieren autenticación
         if not session.get('logged_in'):
             return jsonify({'error': 'No autenticado'}), 401
