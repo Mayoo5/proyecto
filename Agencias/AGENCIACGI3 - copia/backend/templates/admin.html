@@ -1261,6 +1261,33 @@
         let caracteristicas = [];
         let autos = [];  // Variable global para almacenar autos
 
+        // Funciones de modales (debe estar antes del HTML que las usa)
+        function openNewAutoModal() {
+            currentAutoId = null;
+            document.getElementById('modal-title').textContent = 'Nuevo Auto';
+            document.getElementById('autoForm').reset();
+            selectedImages = [];
+            caracteristicas = [];
+            updateCaracteristicasList();
+            updateImagePreview();
+            document.getElementById('autoModal').classList.add('active');
+        }
+
+        function openClienteModal() {
+            document.getElementById('clienteForm').reset();
+            clienteImageFile = null;
+            document.getElementById('clienteImagePreview').innerHTML = '';
+            document.getElementById('clienteModal').classList.add('active');
+        }
+
+        function closeAutoModal() {
+            document.getElementById('autoModal').classList.remove('active');
+        }
+
+        function closeClienteModal() {
+            document.getElementById('clienteModal').classList.remove('active');
+        }
+
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             loadAutos();
@@ -1426,23 +1453,6 @@
                 
                 renderAutosTable(filtered);
             });
-        }
-
-        // Abrir modal nuevo auto
-        function openNewAutoModal() {
-            currentAutoId = null;
-            document.getElementById('modal-title').textContent = 'Nuevo Auto';
-            document.getElementById('autoForm').reset();
-            selectedImages = [];
-            caracteristicas = [];
-            updateCaracteristicasList();
-            updateImagePreview();
-            document.getElementById('autoModal').classList.add('active');
-        }
-
-        // Cerrar modal
-        function closeAutoModal() {
-            document.getElementById('autoModal').classList.remove('active');
         }
 
         // Editar auto
@@ -1769,17 +1779,6 @@
                     </div>
                 `;
             }).join('');
-        }
-
-        function openClienteModal() {
-            clienteImageFile = null;
-            document.getElementById('clienteImagePreview').innerHTML = '';
-            document.getElementById('clienteForm').reset();
-            document.getElementById('clienteModal').classList.add('active');
-        }
-
-        function closeClienteModal() {
-            document.getElementById('clienteModal').classList.remove('active');
         }
 
         function handleDragOverCliente(e) {
