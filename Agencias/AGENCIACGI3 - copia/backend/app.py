@@ -195,7 +195,9 @@ def clientes_page():
 def get_autos():
     """Obtiene lista de autos"""
     data = get_autos_data()
-    return jsonify(data.get('autos_ejemplo', []))
+    # Si tiene 'autos_ejemplo', usar eso; si no, devolver vacío
+    autos = data.get('autos_ejemplo', data.get('autos', []))
+    return jsonify(autos)
 
 @app.route('/api/auto/<int:auto_id>', methods=['GET'])
 def get_auto(auto_id):
@@ -429,8 +431,8 @@ def get_clientes():
 def get_clientes_gallery():
     """Obtiene galería de clientes para la web pública"""
     data = get_clientes_data()
-    images = [{'url': f"/{cliente['imagen']}"} for cliente in data.get('clientes', [])]
-    return jsonify({'images': images})
+    clientes = [{'imagen': cliente['imagen']} for cliente in data.get('clientes', [])]
+    return jsonify({'clientes': clientes})
 
 @app.route('/api/cliente', methods=['POST'])
 def add_cliente():
