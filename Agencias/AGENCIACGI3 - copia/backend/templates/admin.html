@@ -1253,6 +1253,9 @@
     </div>
 
     <script>
+        // URL base del servidor
+        const API_BASE = 'https://gonzalobergmans.pythonanywhere.com';
+        
         let currentAutoId = null;
         let selectedImages = [];
         let caracteristicas = [];
@@ -1282,7 +1285,7 @@
         // Cargar dashboard
         async function loadDashboard() {
             try {
-                const response = await fetch('/api/autos');
+                const response = await fetch(`${API_BASE}/api/autos`);
                 const autos = await response.json();
                 
                 document.getElementById('total-autos').textContent = autos.length;
@@ -1318,7 +1321,7 @@
         // Cargar autos
         async function loadAutos() {
             try {
-                const response = await fetch('/api/autos');
+                const response = await fetch(`${API_BASE}/api/autos`);
                 autos = await response.json();  // Guardar en variable global
                 renderAutosTable(autos);
             } catch (error) {
@@ -1412,7 +1415,7 @@
         function setupSearch() {
             document.getElementById('search-autos').addEventListener('input', async (e) => {
                 const query = e.target.value.toLowerCase();
-                const response = await fetch('/api/autos');
+                const response = await fetch(`${API_BASE}/api/autos`);
                 const autos = await response.json();
                 
                 const filtered = autos.filter(auto =>
@@ -1445,7 +1448,7 @@
         // Editar auto
         async function editAuto(autoId) {
             try {
-                const response = await fetch(`/api/auto/${autoId}`);
+                const response = await fetch(`${API_BASE}/api/auto/${autoId}`);
                 const auto = await response.json();
                 
                 currentAutoId = auto.id;
@@ -1517,13 +1520,13 @@
             try {
                 let response;
                 if (currentAutoId) {
-                    response = await fetch(`/api/auto/${currentAutoId}`, {
+                    response = await fetch(`${API_BASE}/api/auto/${currentAutoId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(autoData)
                     });
                 } else {
-                    response = await fetch('/api/auto', {
+                    response = await fetch(`${API_BASE}/api/auto`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(autoData)
@@ -1545,7 +1548,7 @@
             if (!confirm('¿Estás seguro de que deseas eliminar este auto?')) return;
 
             try {
-                await fetch(`/api/auto/${autoId}`, { method: 'DELETE' });
+                await fetch(`${API_BASE}/api/auto/${autoId}`, { method: 'DELETE' });
                 showToast('Auto eliminado correctamente', 'success');
                 loadAutos();
             } catch (error) {
@@ -1628,7 +1631,7 @@
                     formData.append('auto_id', currentAutoId || 'temp');
 
                     try {
-                        const response = await fetch('/api/upload', {
+                        const response = await fetch(`${API_BASE}/api/upload`, {
                             method: 'POST',
                             body: formData
                         });
@@ -1739,7 +1742,7 @@
         let clienteImageFile = null;
 
         function loadClientes() {
-            fetch('/api/clientes')
+            fetch(`${API_BASE}/api/clientes-gallery`)
                 .then(r => r.json())
                 .then(data => {
                     clientes = data.clientes || [];
@@ -1839,7 +1842,7 @@
             formData.append('file', blob, 'cliente_' + Date.now() + '.jpg');
 
             try {
-                const response = await fetch('/api/cliente-upload', {
+                const response = await fetch(`${API_BASE}/api/cliente-upload`, {
                     method: 'POST',
                     body: formData
                 });
@@ -1861,7 +1864,7 @@
             if (!confirm('¿Deseas eliminar esta foto?')) return;
 
             try {
-                const response = await fetch(`/api/cliente/${index}`, {
+                const response = await fetch(`${API_BASE}/api/cliente/${index}`, {
                     method: 'DELETE'
                 });
 
