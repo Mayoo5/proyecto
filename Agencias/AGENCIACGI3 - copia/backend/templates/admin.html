@@ -1328,6 +1328,23 @@
             window.location.href = '/logout';
         }
 
+        // Funciones auxiliares
+        function updateCaracteristicasList() {
+            const list = document.getElementById('caracteristicas-list');
+            list.innerHTML = caracteristicas.map((car, i) => `
+                <div class="item">
+                    <span>${car}</span>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeCaracteristica(${i})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function showToast(msg, type) {
+            console.log(`[${type}] ${msg}`);
+        }
+
         // ===== FIN FUNCIONES DE EVENTOS =====
 
         // Inicializar
@@ -1611,19 +1628,6 @@
             updateCaracteristicasList();
         }
 
-        function updateCaracteristicasList() {
-            const list = document.getElementById('caracteristicas-list');
-            list.innerHTML = caracteristicas.map((car, i) => `
-                <div class="item">
-                    <span>${car}</span>
-                    <button type="button" class="btn btn-danger btn-small" onclick="removeCaracteristica(${i})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Carga de imágenes
         function handleDragOver(e) {
             e.preventDefault();
             document.getElementById('imageUpload').classList.add('dragover');
