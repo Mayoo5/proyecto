@@ -803,7 +803,6 @@
                 <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
                 <li><a href="#" onclick="showSection('autos')"><i class="fas fa-car"></i> <span>Mis Autos</span></a></li>
                 <li><a href="#" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span>Clientes Satisfechos</span></a></li>
-                <li><a href="#" onclick="showSection('reportes')"><i class="fas fa-file-chart-line"></i> <span>Reportes</span></a></li>
                 <li><a href="#" onclick="showSection('configuracion')"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
             </ul>
             <div class="sidebar-footer">
@@ -906,46 +905,6 @@
                 </div>
 
                 <div class="gallery-container" id="clientesGallery">
-                </div>
-            </section>
-
-            <!-- Reportes -->
-            <section id="reportes" class="section-content">
-                <div class="header">
-                    <h1>Reportes</h1>
-                    <p>Análisis de interacciones de clientes</p>
-                </div>
-                
-                <div class="section">
-                    <h2 style="margin-bottom: 20px;">📊 Clics en WhatsApp por Auto</h2>
-                    <p style="color: #666; margin-bottom: 20px;">Este reporte contabiliza los clics en el botón de WhatsApp para identificar cuáles son los modelos que generan más consultas de clientes.</p>
-                    
-                    <div style="margin-bottom: 30px;">
-                        <button class="btn btn-primary" onclick="cargarReporteWhatsApp()">
-                            <i class="fas fa-sync-alt"></i> Actualizar Reporte
-                        </button>
-                    </div>
-                    
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Marca</th>
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Modelo</th>
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Año</th>
-                                    <th style="padding: 12px; text-align: center; font-weight: 600;">Clics WhatsApp</th>
-                                    <th style="padding: 12px; text-align: center; font-weight: 600;">Posición</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reporteWhatsAppTable">
-                                <tr>
-                                    <td colspan="5" style="padding: 20px; text-align: center; color: #999;">
-                                        <i class="fas fa-info-circle"></i> Haz clic en "Actualizar Reporte" para cargar los datos
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </section>
 
@@ -1932,47 +1891,6 @@
                 closeClienteModal();
             }
         });
-
-        // ============= REPORTE WHATSAPP =============
-        function cargarReporteWhatsApp() {
-            // Simular carga de datos (en producción, esto vendría de una API)
-            const tabla = document.getElementById('reporteWhatsAppTable');
-            tabla.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center;"><i class="fas fa-spinner fa-spin"></i> Cargando reporte...</td></tr>';
-            
-            // Simular delay de carga
-            setTimeout(() => {
-                // Crear datos de ejemplo (en producción vendría del backend)
-                const reporteData = [
-                    { marca: 'Toyota', modelo: 'Corolla', año: 2024, clics: 45 },
-                    { marca: 'Honda', modelo: 'Civic', año: 2023, clics: 38 },
-                    { marca: 'Ford', modelo: 'Fiesta', año: 2022, clics: 32 },
-                    { marca: 'Chevrolet', modelo: 'Cruze', año: 2023, clics: 28 },
-                    { marca: 'Volkswagen', modelo: 'Polo', año: 2024, clics: 25 },
-                ];
-                
-                // Ordenar por clics descendente
-                reporteData.sort((a, b) => b.clics - a.clics);
-                
-                // Generar tabla
-                tabla.innerHTML = reporteData.map((item, index) => `
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 12px;">${item.marca}</td>
-                        <td style="padding: 12px;">${item.modelo}</td>
-                        <td style="padding: 12px;">${item.año}</td>
-                        <td style="padding: 12px; text-align: center;">
-                            <span style="background: #0066cc; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 600;">
-                                ${item.clics}
-                            </span>
-                        </td>
-                        <td style="padding: 12px; text-align: center;">
-                            <span style="background: ${index === 0 ? '#fbbf24' : index === 1 ? '#9ca3af' : index === 2 ? '#dc2626' : '#e5e7eb'}; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 600;">
-                                ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (index + 1)}
-                            </span>
-                        </td>
-                    </tr>
-                `).join('');
-            }, 500);
-        }
 
         // ============= CONFIGURACIÓN =============
         function toggleWhatsappSchedule(enabled) {
