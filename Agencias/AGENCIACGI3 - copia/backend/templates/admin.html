@@ -1954,42 +1954,11 @@
 
         // Cargar clientes al iniciar
         loadClientes();
-        loadAutos();            const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-            days.forEach(day => {
-                const isActive = document.getElementById(day + '_active').checked;
-                const from = document.getElementById(day + '_from').value;
-                const to = document.getElementById(day + '_to').value;
-                
-                schedule.days[day] = {
-                    active: isActive,
-                    from: from,
-                    to: to
-                };
-            });
-
-            // Enviar al backend
-            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/whatsapp-schedule', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(schedule)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('✅ Horarios guardados correctamente');
-                } else {
-                    alert('❌ Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('❌ Error al guardar horarios');
-            });
-        }
+        loadAutos();
 
         // Cargar clientes al iniciar
         loadClientes();
         loadAutos();
-
+    </script>
+</body>
+</html>
