@@ -1398,4 +1398,76 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoPlay();
         });
     }
+
+    // Cargar configuración de horarios de WhatsApp
+    checkWhatsAppSchedule();
+    
+    // Verificar cada 60 segundos si cambió el estado de disponibilidad
+    setInterval(checkWhatsAppSchedule, 60000);
+
+    // Cargar el banner personalizado
+    loadBannerText();
+    
+    // Cargar autos
+    cargarAutosDesdeServidor();
 });
+
+// ============= CONTROL DE HORARIOS DE WHATSAPP =============
+async function checkWhatsAppSchedule() {
+    try {
+        const response = await fetch('https://gonzalobergmans.pythonanywhere.com/api/config/whatsapp-schedule');
+        const data = await response.json();
+        
+        if (data.success && data.schedule) {
+            const schedule = data.schedule;
+            const whatsappButtons = document.querySelectorAll('[onclick*="whatsapp"]');
+            const isAvailable = isWhatsAppAvailable(schedule);
+            
+            whatsappButtons.forEach(btn => {
+                if (isAvailable) {
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                    btn.title = 'Contactar por WhatsApp';
+                } else {
+                    btn.style.opacity = '0.5';
+                    btn.style.pointerEvents = 'none';
+                    btn.title = 'WhatsApp no disponible en este horario';
+                }
+            });
+        }
+    } catch (error) {
+        console.log('No se pudo cargar horarios de WhatsApp');
+    }
+}
+
+function isWhatsAppAvailable(schedule) {
+    if (!schedule.enabled) return false;
+    
+    const now = new Date();
+    const dayIndex = now.getDay(); // 0=Domingo, 1=Lunes, etc.
+    const daysMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    const dayKey = daysMap[dayIndex];
+    
+    const daySchedule = schedule.days[dayKey];
+    if (!daySchedule || !daySchedule.active) return false;
+    
+    const currentTime = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    return currentTime >= daySchedule.from && currentTime <= daySchedule.to;
+}
+
+// ============= CARGAR BANNER PERSONALIZADO =============
+async function loadBannerText() {
+    try {
+        const response = await fetch('https://gonzalobergmans.pythonanywhere.com/api/config/banner');
+        const data = await response.json();
+        
+        if (data.success && data.banner_text) {
+            const heroH1 = document.querySelector('.hero-section h1');
+            if (heroH1) {
+                heroH1.textContent = data.banner_text;
+            }
+        }
+    } catch (error) {
+        console.log('No se pudo cargar banner personalizado');
+    }
+}

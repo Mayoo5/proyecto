@@ -954,7 +954,111 @@
                 <div class="header">
                     <h1>Configuración</h1>
                 </div>
-                <p>Módulo en desarrollo...</p>
+
+                <!-- Editor de Banner -->
+                <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <i class="fas fa-image" style="font-size: 24px; color: #0066cc;"></i>
+                        <h2 style="font-size: 18px; font-weight: 700;">Editor de Banner</h2>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Texto principal del banner hero</p>
+                        <input type="text" id="bannerText" placeholder="Encuentra el Auto de tus Sueños" 
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; transition: all 0.3s;">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveBannerConfig()">
+                        <i class="fas fa-save"></i> Guardar Banner
+                    </button>
+                </div>
+
+                <!-- Horarios de Atención -->
+                <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <i class="fas fa-clock" style="font-size: 24px; color: #0066cc;"></i>
+                        <h2 style="font-size: 18px; font-weight: 700;">Horarios de Atención WhatsApp</h2>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;">
+                                <i class="fas fa-toggle-on"></i> Habilitar Horarios
+                            </label>
+                            <div style="display: flex; gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="whatsappEnabled" value="true" onchange="toggleWhatsappSchedule(true)" style="cursor: pointer;">
+                                    <span>Activo</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="whatsappEnabled" value="false" onchange="toggleWhatsappSchedule(false)" style="cursor: pointer;">
+                                    <span>Inactivo</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="scheduleContainer" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #e8eef5; border-bottom: 2px solid #ddd;">
+                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Día</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Habilitado</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Desde</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Hasta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Lunes</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="mon_active" checked></td>
+                                    <td style="padding: 12px;"><input type="time" id="mon_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                    <td style="padding: 12px;"><input type="time" id="mon_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Martes</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="tue_active" checked></td>
+                                    <td style="padding: 12px;"><input type="time" id="tue_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                    <td style="padding: 12px;"><input type="time" id="tue_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Miércoles</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="wed_active" checked></td>
+                                    <td style="padding: 12px;"><input type="time" id="wed_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                    <td style="padding: 12px;"><input type="time" id="wed_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Jueves</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="thu_active" checked></td>
+                                    <td style="padding: 12px;"><input type="time" id="thu_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                    <td style="padding: 12px;"><input type="time" id="thu_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Viernes</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="fri_active" checked></td>
+                                    <td style="padding: 12px;"><input type="time" id="fri_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                    <td style="padding: 12px;"><input type="time" id="fri_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;"><strong>Sábado</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="sat_active"></td>
+                                    <td style="padding: 12px;"><input type="time" id="sat_from" value="10:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
+                                    <td style="padding: 12px;"><input type="time" id="sat_to" value="16:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px;"><strong>Domingo</strong></td>
+                                    <td style="padding: 12px;"><input type="checkbox" id="sun_active"></td>
+                                    <td style="padding: 12px;"><input type="time" id="sun_from" value="10:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
+                                    <td style="padding: 12px;"><input type="time" id="sun_to" value="16:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveScheduleConfig()">
+                            <i class="fas fa-save"></i> Guardar Horarios
+                        </button>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -1870,8 +1974,129 @@
             }, 500);
         }
 
-        // Cargar clientes al iniciar
+        // ============= CONFIGURACIÓN =============
+        function toggleWhatsappSchedule(enabled) {
+            const container = document.getElementById('scheduleContainer');
+            container.style.display = enabled ? 'block' : 'none';
+        }
+
+        function saveBannerConfig() {
+            const bannerText = document.getElementById('bannerText').value;
+            
+            if (!bannerText.trim()) {
+                alert('Por favor ingresa un texto para el banner');
+                return;
+            }
+
+            // Enviar al backend
+            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/banner', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ banner_text: bannerText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Banner guardado correctamente');
+                    // Actualizar el texto en la web en tiempo real
+                    updateBannerInFrontend(bannerText);
+                } else {
+                    alert('❌ Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Error al guardar banner');
+            });
+        }
+
+        function saveScheduleConfig() {
+            const isEnabled = document.querySelector('input[name="whatsappEnabled"]:checked')?.value === 'true';
+            
+            const schedule = {
+                enabled: isEnabled,
+                days: {}
+            };
+
+            const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            days.forEach(day => {
+                const isActive = document.getElementById(day + '_active').checked;
+                const from = document.getElementById(day + '_from').value;
+                const to = document.getElementById(day + '_to').value;
+                
+                schedule.days[day] = {
+                    active: isActive,
+                    from: from,
+                    to: to
+                };
+            });
+
+            // Enviar al backend
+            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/whatsapp-schedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(schedule)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Horarios guardados correctamente');
+                } else {
+                    alert('❌ Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Error al guardar horarios');
+            });
+        }
+
+        function loadConfigSettings() {
+            // Cargar banner configurado
+            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/banner')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.banner_text) {
+                        document.getElementById('bannerText').value = data.banner_text;
+                    }
+                })
+                .catch(error => console.log('Banner config no disponible'));
+
+            // Cargar horarios configurados
+            fetch('https://gonzalobergmans.pythonanywhere.com/api/config/whatsapp-schedule')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.schedule) {
+                        const schedule = data.schedule;
+                        
+                        const isEnabled = schedule.enabled;
+                        document.querySelector(`input[name="whatsappEnabled"][value="${isEnabled}"]`).checked = true;
+                        document.getElementById('scheduleContainer').style.display = isEnabled ? 'block' : 'none';
+
+                        Object.keys(schedule.days).forEach(day => {
+                            const dayData = schedule.days[day];
+                            document.getElementById(day + '_active').checked = dayData.active;
+                            document.getElementById(day + '_from').value = dayData.from;
+                            document.getElementById(day + '_to').value = dayData.to;
+                        });
+                    }
+                })
+                .catch(error => console.log('Schedule config no disponible'));
+        }
+
+        function updateBannerInFrontend(text) {
+            // Actualizar el banner en la página principal sin recargar
+            const bannerElement = document.querySelector('.hero-section h1');
+            if (bannerElement) {
+                bannerElement.textContent = text;
+            }
+        }
+
+        // Cargar configuración al iniciar
         loadClientes();
-    </script>
-</body>
-</html>
+        loadConfigSettings();
+

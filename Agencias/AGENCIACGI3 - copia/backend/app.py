@@ -165,7 +165,7 @@ def check_login():
     """Verifica si el usuario está logeado"""
     if request.path.startswith('/api/'):
         # Permitir GET a endpoints públicos sin autenticación
-        if request.path in ['/api/autos', '/api/clientes-gallery', '/api/carousel-images'] and request.method == 'GET':
+        if request.path in ['/api/autos', '/api/clientes-gallery', '/api/carousel-images', '/api/config/banner', '/api/config/whatsapp-schedule'] and request.method == 'GET':
             return None
         # Resto de APIs requieren autenticación
         if not session.get('logged_in'):
@@ -555,6 +555,99 @@ def get_carousel_images():
     except Exception as e:
         print(f"Error obteniendo imágenes del carrusel: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
+
+# ============= ENDPOINTS DE CONFIGURACIÓN =============
+CONFIG_FILE = os.path.join(BACKEND_DIR, 'config.json')
+
+def get_config_data():
+    """Carga la configuración desde archivo"""
+    try:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"Error cargando config.json: {e}")
+    
+    return {
+        'banner_text': 'Encuentra el Auto de tus Sueños',
+        'whatsapp_schedule': {
+            'enabled': True,
+            'days': {
+                'mon': {'active': True, 'from': '09:00', 'to': '18:00'},
+                'tue': {'active': True, 'from': '09:00', 'to': '18:00'},
+                'wed': {'active': True, 'from': '09:00', 'to': '18:00'},
+                'thu': {'active': True, 'from': '09:00', 'to': '18:00'},
+                'fri': {'active': True, 'from': '09:00', 'to': '18:00'},
+                'sat': {'active': False, 'from': '10:00', 'to': '16:00'},
+                'sun': {'active': False, 'from': '10:00', 'to': '16:00'},
+            }
+        }
+    }
+
+def save_config_data(data):
+    """Guarda la configuración en archivo"""
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        print(f"Error guardando config.json: {e}")
+        return False
+
+@app.route('/api/config/banner', methods=['GET'])
+def get_banner_config():
+    """Obtiene la configuración del banner"""
+    config = get_config_data()
+    return jsonify({
+        'success': True,
+        'banner_text': config.get('banner_text', 'Encuentra el Auto de tus Sueños')
+    })
+
+@app.route('/api/config/banner', methods=['POST'])
+def save_banner_config():
+    """Guarda la configuración del banner"""
+    try:
+        data = request.get_json()
+        banner_text = data.get('banner_text', '')
+        
+        if not banner_text or len(banner_text) < 3:
+            return jsonify({'success': False, 'message': 'Texto del banner inválido'}), 400
+        
+        config = get_config_data()
+        config['banner_text'] = banner_text
+        
+        if save_config_data(config):
+            return jsonify({'success': True, 'message': 'Banner guardado correctamente'})
+        else:
+            return jsonify({'success': False, 'message': 'Error al guardar'}), 500
+    except Exception as e:
+        print(f"Error guardando banner: {e}")
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+@app.route('/api/config/whatsapp-schedule', methods=['GET'])
+def get_whatsapp_schedule():
+    """Obtiene los horarios de atención de WhatsApp"""
+    config = get_config_data()
+    return jsonify({
+        'success': True,
+        'schedule': config.get('whatsapp_schedule')
+    })
+
+@app.route('/api/config/whatsapp-schedule', methods=['POST'])
+def save_whatsapp_schedule():
+    """Guarda los horarios de atención de WhatsApp"""
+    try:
+        data = request.get_json()
+        config = get_config_data()
+        config['whatsapp_schedule'] = data
+        
+        if save_config_data(config):
+            return jsonify({'success': True, 'message': 'Horarios guardados correctamente'})
+        else:
+            return jsonify({'success': False, 'message': 'Error al guardar'}), 500
+    except Exception as e:
+        print(f"Error guardando horarios: {e}")
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
