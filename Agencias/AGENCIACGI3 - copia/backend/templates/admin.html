@@ -802,7 +802,8 @@
             <ul class="nav-menu">
                 <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
                 <li><a href="#" onclick="showSection('autos')"><i class="fas fa-car"></i> <span>Mis Autos</span></a></li>
-                <li><a href="#" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span>Clientes Satisfechos</span></a></li>
+                <li><a href="#" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+                <li><a href="#" onclick="showSection('reportes')"><i class="fas fa-file-chart-line"></i> <span>Reportes</span></a></li>
                 <li><a href="#" onclick="showSection('configuracion')"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
             </ul>
             <div class="sidebar-footer">
@@ -908,116 +909,20 @@
                 </div>
             </section>
 
+            <!-- Reportes -->
+            <section id="reportes" class="section-content">
+                <div class="header">
+                    <h1>Reportes</h1>
+                </div>
+                <p>Módulo en desarrollo...</p>
+            </section>
+
             <!-- Configuración -->
             <section id="configuracion" class="section-content">
                 <div class="header">
                     <h1>Configuración</h1>
                 </div>
-
-                <!-- Editor de Banner -->
-                <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                        <i class="fas fa-image" style="font-size: 24px; color: #0066cc;"></i>
-                        <h2 style="font-size: 18px; font-weight: 700;">Editor de Banner</h2>
-                    </div>
-                    
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Texto principal del banner hero</p>
-                        <input type="text" id="bannerText" placeholder="Encuentra el Auto de tus Sueños" 
-                            style="width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; transition: all 0.3s;">
-                    </div>
-
-                    <button class="btn btn-primary" onclick="saveBannerConfig()">
-                        <i class="fas fa-save"></i> Guardar Banner
-                    </button>
-                </div>
-
-                <!-- Horarios de Atención -->
-                <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                        <i class="fas fa-clock" style="font-size: 24px; color: #0066cc;"></i>
-                        <h2 style="font-size: 18px; font-weight: 700;">Horarios de Atención WhatsApp</h2>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                        <div>
-                            <label style="display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;">
-                                <i class="fas fa-toggle-on"></i> Habilitar Horarios
-                            </label>
-                            <div style="display: flex; gap: 10px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                    <input type="radio" name="whatsappEnabled" value="true" onchange="toggleWhatsappSchedule(true)" style="cursor: pointer;">
-                                    <span>Activo</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                    <input type="radio" name="whatsappEnabled" value="false" onchange="toggleWhatsappSchedule(false)" style="cursor: pointer;">
-                                    <span>Inactivo</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="scheduleContainer" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #e8eef5; border-bottom: 2px solid #ddd;">
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Día</th>
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Habilitado</th>
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Desde</th>
-                                    <th style="padding: 12px; text-align: left; font-weight: 600;">Hasta</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Lunes</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="mon_active" checked></td>
-                                    <td style="padding: 12px;"><input type="time" id="mon_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                    <td style="padding: 12px;"><input type="time" id="mon_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Martes</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="tue_active" checked></td>
-                                    <td style="padding: 12px;"><input type="time" id="tue_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                    <td style="padding: 12px;"><input type="time" id="tue_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Miércoles</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="wed_active" checked></td>
-                                    <td style="padding: 12px;"><input type="time" id="wed_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                    <td style="padding: 12px;"><input type="time" id="wed_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Jueves</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="thu_active" checked></td>
-                                    <td style="padding: 12px;"><input type="time" id="thu_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                    <td style="padding: 12px;"><input type="time" id="thu_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Viernes</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="fri_active" checked></td>
-                                    <td style="padding: 12px;"><input type="time" id="fri_from" value="09:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                    <td style="padding: 12px;"><input type="time" id="fri_to" value="18:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;"></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 12px;"><strong>Sábado</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="sat_active"></td>
-                                    <td style="padding: 12px;"><input type="time" id="sat_from" value="10:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
-                                    <td style="padding: 12px;"><input type="time" id="sat_to" value="16:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 12px;"><strong>Domingo</strong></td>
-                                    <td style="padding: 12px;"><input type="checkbox" id="sun_active"></td>
-                                    <td style="padding: 12px;"><input type="time" id="sun_from" value="10:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
-                                    <td style="padding: 12px;"><input type="time" id="sun_to" value="16:00" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px;" disabled></td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveScheduleConfig()">
-                            <i class="fas fa-save"></i> Guardar Horarios
-                        </button>
-                    </div>
-                </div>
+                <p>Módulo en desarrollo...</p>
             </section>
         </div>
     </div>
@@ -1223,10 +1128,6 @@
                     </div>
                     <div class="checkbox-group">
                         <div class="checkbox">
-                            <input type="checkbox" id="publicado" name="publicado" checked>
-                            <label for="publicado"><i class="fas fa-eye"></i> Publicar / Mostrar en web</label>
-                        </div>
-                        <div class="checkbox">
                             <input type="checkbox" id="nuevo" name="nuevo">
                             <label for="nuevo">Es 0 KM / Nuevo</label>
                         </div>
@@ -1257,18 +1158,18 @@
     </div>
 
     <script>
-        // URL base del servidor
-        const API_BASE = 'https://gonzalobergmans.pythonanywhere.com';
-        
         let currentAutoId = null;
         let selectedImages = [];
         let caracteristicas = [];
-        let autos = [];
-        let clientes = [];
-        let clienteImageFile = null;
+        let autos = [];  // Variable global para almacenar autos
 
-        // ===== FUNCIONES DE EVENTOS - DEBEN ESTAR AL INICIO =====
-        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAutos();
+            setupSearch();
+        });
+
+        // Mostrar secciones
         function showSection(sectionId) {
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
@@ -1283,112 +1184,10 @@
             }
         }
 
-        function openNewAutoModal() {
-            currentAutoId = null;
-            document.getElementById('modal-title').textContent = 'Nuevo Auto';
-            document.getElementById('autoForm').reset();
-            selectedImages = [];
-            caracteristicas = [];
-            updateCaracteristicasList();
-            updateImagePreview();
-            document.getElementById('autoModal').classList.add('active');
-        }
-
-        function closeAutoModal() {
-            document.getElementById('autoModal').classList.remove('active');
-        }
-
-        function openClienteModal() {
-            document.getElementById('clienteForm').reset();
-            clienteImageFile = null;
-            document.getElementById('clienteImagePreview').innerHTML = '';
-            document.getElementById('clienteModal').classList.add('active');
-        }
-
-        function closeClienteModal() {
-            document.getElementById('clienteModal').classList.remove('active');
-        }
-
-        function toggleWhatsappSchedule(enabled) {
-            const container = document.getElementById('scheduleContainer');
-            container.style.display = enabled ? 'block' : 'none';
-        }
-
-        function saveBannerConfig() {
-            const bannerText = document.getElementById('bannerText').value;
-            if (!bannerText.trim()) {
-                alert('Por favor ingresa un texto para el banner');
-                return;
-            }
-            // Placeholder - en caso de necesitar guardar
-            alert('Banner: ' + bannerText);
-        }
-
-        function saveScheduleConfig() {
-            alert('Horarios guardados');
-        }
-
-        function logout() {
-            window.location.href = '/logout';
-        }
-
-        // Funciones auxiliares
-        function updateCaracteristicasList() {
-            const list = document.getElementById('caracteristicas-list');
-            list.innerHTML = caracteristicas.map((car, i) => `
-                <div class="item">
-                    <span>${car}</span>
-                    <button type="button" class="btn btn-danger btn-small" onclick="removeCaracteristica(${i})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function showToast(msg, type) {
-            console.log(`[${type}] ${msg}`);
-        }
-
-        // Funciones stub para elementos del HTML
-        function sortAutos() {}
-        function editAuto() {}
-        function saveAuto() {}
-        function deleteAuto() {}
-        function removeImage() {}
-        function removeCaracteristica() {}
-        function saveCliente() {}
-        function deleteCliente() {}
-        function handleDragOver() {}
-        function handleDragLeave() {}
-        function handleDrop() {}
-        function handleFileSelect() {}
-        function handleDragOverCliente() {}
-        function handleDragLeaveCliente() {}
-        function handleDropCliente() {}
-        function handleFileSelectCliente() {}
-        function dragStart() {}
-        function dragOver() {}
-        function drop() {}
-        function dragLeave() {}
-        function dragEnd() {}
-        function addCaracteristica() {}
-        function renderAutosTable() {}
-        function formatCurrency() {}
-        function renderClientesGallery() {}
-
-        // ===== FIN FUNCIONES DE EVENTOS =====
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAutos();
-            setupSearch();
-            loadClientes();
-        });
-
         // Cargar dashboard
         async function loadDashboard() {
             try {
-                const response = await fetch(`${API_BASE}/api/autos`);
+                const response = await fetch('/api/autos');
                 const autos = await response.json();
                 
                 document.getElementById('total-autos').textContent = autos.length;
@@ -1406,7 +1205,6 @@
                         <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
                         <td>${auto.año}</td>
                         <td>
-                            ${auto.publicado ? '<span class="status-badge active">Publicado</span>' : '<span class="status-badge" style="background: #d1d5db; color: #6b7280;">Pausado</span>'}
                             ${auto.oferta ? '<span class="status-badge active">Oferta</span>' : ''}
                             ${auto.nuevo ? '<span class="status-badge active">Nuevo</span>' : ''}
                         </td>
@@ -1425,7 +1223,7 @@
         // Cargar autos
         async function loadAutos() {
             try {
-                const response = await fetch(`${API_BASE}/api/autos`);
+                const response = await fetch('/api/autos');
                 autos = await response.json();  // Guardar en variable global
                 renderAutosTable(autos);
             } catch (error) {
@@ -1504,9 +1302,6 @@
                     <td>${auto.moneda} ${formatCurrency(auto.precio)}</td>
                     <td>${auto.kilometraje.toLocaleString('es-AR')}</td>
                     <td style="display: flex; gap: 5px;">
-                        <button class="btn btn-secondary btn-small toggle-estado-btn" onclick="toggleAutoEstado(${auto.id})" title="${auto.publicado ? 'Pausar auto' : 'Activar auto'}" style="background-color: ${auto.publicado ? '#10b981' : '#9ca3af'};">
-                            <i class="fas fa-${auto.publicado ? 'eye' : 'eye-slash'}"></i>
-                        </button>
                         <button class="btn btn-secondary btn-small" onclick="editAuto(${auto.id})">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -1522,7 +1317,7 @@
         function setupSearch() {
             document.getElementById('search-autos').addEventListener('input', async (e) => {
                 const query = e.target.value.toLowerCase();
-                const response = await fetch(`${API_BASE}/api/autos`);
+                const response = await fetch('/api/autos');
                 const autos = await response.json();
                 
                 const filtered = autos.filter(auto =>
@@ -1535,10 +1330,27 @@
             });
         }
 
+        // Abrir modal nuevo auto
+        function openNewAutoModal() {
+            currentAutoId = null;
+            document.getElementById('modal-title').textContent = 'Nuevo Auto';
+            document.getElementById('autoForm').reset();
+            selectedImages = [];
+            caracteristicas = [];
+            updateCaracteristicasList();
+            updateImagePreview();
+            document.getElementById('autoModal').classList.add('active');
+        }
+
+        // Cerrar modal
+        function closeAutoModal() {
+            document.getElementById('autoModal').classList.remove('active');
+        }
+
         // Editar auto
         async function editAuto(autoId) {
             try {
-                const response = await fetch(`${API_BASE}/api/auto/${autoId}`);
+                const response = await fetch(`/api/auto/${autoId}`);
                 const auto = await response.json();
                 
                 currentAutoId = auto.id;
@@ -1560,7 +1372,6 @@
                 document.getElementById('categoria').value = auto.categoria || 'auto';
                 document.getElementById('whatsapp').value = auto.whatsapp || '';
                 document.getElementById('whatsapp2').value = auto.whatsapp2 || '';
-                document.getElementById('publicado').checked = auto.publicado !== false; // Por defecto true
                 document.getElementById('nuevo').checked = auto.nuevo || false;
                 document.getElementById('destacado').checked = auto.destacado || false;
                 document.getElementById('oferta').checked = auto.oferta || false;
@@ -1599,7 +1410,6 @@
                 categoria: document.getElementById('categoria').value,
                 whatsapp: document.getElementById('whatsapp').value,
                 whatsapp2: document.getElementById('whatsapp2').value,
-                publicado: document.getElementById('publicado').checked,
                 nuevo: document.getElementById('nuevo').checked,
                 destacado: document.getElementById('destacado').checked,
                 oferta: document.getElementById('oferta').checked,
@@ -1612,13 +1422,13 @@
             try {
                 let response;
                 if (currentAutoId) {
-                    response = await fetch(`${API_BASE}/api/auto/${currentAutoId}`, {
+                    response = await fetch(`/api/auto/${currentAutoId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(autoData)
                     });
                 } else {
-                    response = await fetch(`${API_BASE}/api/auto`, {
+                    response = await fetch('/api/auto', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(autoData)
@@ -1640,32 +1450,11 @@
             if (!confirm('¿Estás seguro de que deseas eliminar este auto?')) return;
 
             try {
-                await fetch(`${API_BASE}/api/auto/${autoId}`, { method: 'DELETE' });
+                await fetch(`/api/auto/${autoId}`, { method: 'DELETE' });
                 showToast('Auto eliminado correctamente', 'success');
                 loadAutos();
             } catch (error) {
                 showToast('Error eliminando auto', 'error');
-            }
-        }
-
-        // Toggle estado del auto (pausar/activar)
-        async function toggleAutoEstado(autoId) {
-            try {
-                const response = await fetch(`${API_BASE}/api/auto/${autoId}/toggle-estado`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    showToast(result.mensaje, 'success');
-                    loadAutos();
-                } else {
-                    showToast('Error cambiando el estado del auto', 'error');
-                }
-            } catch (error) {
-                showToast('Error cambiando el estado del auto', 'error');
-                console.error(error);
             }
         }
 
@@ -1686,6 +1475,19 @@
             updateCaracteristicasList();
         }
 
+        function updateCaracteristicasList() {
+            const list = document.getElementById('caracteristicas-list');
+            list.innerHTML = caracteristicas.map((car, i) => `
+                <div class="item">
+                    <span>${car}</span>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeCaracteristica(${i})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Carga de imágenes
         function handleDragOver(e) {
             e.preventDefault();
             document.getElementById('imageUpload').classList.add('dragover');
@@ -1731,7 +1533,7 @@
                     formData.append('auto_id', currentAutoId || 'temp');
 
                     try {
-                        const response = await fetch(`${API_BASE}/api/upload`, {
+                        const response = await fetch('/api/upload', {
                             method: 'POST',
                             body: formData
                         });
@@ -1838,9 +1640,11 @@
         }
 
         // ============= CLIENTES SATISFECHOS =============
+        let clientes = [];
+        let clienteImageFile = null;
 
         function loadClientes() {
-            fetch(`${API_BASE}/api/clientes-gallery`)
+            fetch('/api/clientes')
                 .then(r => r.json())
                 .then(data => {
                     clientes = data.clientes || [];
@@ -1867,6 +1671,17 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function openClienteModal() {
+            clienteImageFile = null;
+            document.getElementById('clienteImagePreview').innerHTML = '';
+            document.getElementById('clienteForm').reset();
+            document.getElementById('clienteModal').classList.add('active');
+        }
+
+        function closeClienteModal() {
+            document.getElementById('clienteModal').classList.remove('active');
         }
 
         function handleDragOverCliente(e) {
@@ -1929,7 +1744,7 @@
             formData.append('file', blob, 'cliente_' + Date.now() + '.jpg');
 
             try {
-                const response = await fetch(`${API_BASE}/api/cliente-upload`, {
+                const response = await fetch('/api/cliente-upload', {
                     method: 'POST',
                     body: formData
                 });
@@ -1951,7 +1766,7 @@
             if (!confirm('¿Deseas eliminar esta foto?')) return;
 
             try {
-                const response = await fetch(`${API_BASE}/api/cliente/${index}`, {
+                const response = await fetch(`/api/cliente/${index}`, {
                     method: 'DELETE'
                 });
 
@@ -1984,11 +1799,6 @@
 
         // Cargar clientes al iniciar
         loadClientes();
-        loadAutos();
-
-        // Cargar clientes al iniciar
-        loadClientes();
-        loadAutos();
     </script>
 </body>
 </html>
