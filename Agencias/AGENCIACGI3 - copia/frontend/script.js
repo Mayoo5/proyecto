@@ -36,7 +36,8 @@ async function cargarAutosDesdeServidor() {
         if (response.ok) {
             const data = await response.json();
             // La API devuelve directamente el array de autos
-            autos = Array.isArray(data) ? data : [];
+            // Filtrar solo los autos que están publicados
+            autos = Array.isArray(data) ? data.filter(auto => auto.publicado !== false) : [];
             cargarAutos();
             // Actualizar contador inicial
             actualizarContadorResultados(autos.length);

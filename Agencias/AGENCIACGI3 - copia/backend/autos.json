@@ -36,7 +36,8 @@
       "categoria": "auto",
       "cero_km": false,
       "whatsapp": "543533684820",
-      "gnc": "no"
+      "gnc": "no",
+      "publicado": true
     },
     {
       "id": 2,
@@ -76,7 +77,8 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "5493533431464",
-      "recienLlegados": true
+      "recienLlegados": true,
+      "publicado": true
     },
     {
       "id": 3,
@@ -115,7 +117,8 @@
       "categoria": "suv",
       "cero_km": false,
       "gnc": "no",
-      "whatsapp": ""
+      "whatsapp": "",
+      "publicado": true
     },
     {
       "id": 4,
@@ -156,7 +159,8 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "",
-      "recienLlegados": true
+      "recienLlegados": true,
+      "publicado": true
     },
     {
       "id": 5,
@@ -194,7 +198,8 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "",
-      "recienLlegados": true
+      "recienLlegados": true,
+      "publicado": true
     },
     {
       "id": 6,
@@ -239,7 +244,8 @@
       "cero_km": false,
       "gnc": "no",
       "whatsapp": "",
-      "recienLlegados": true
+      "recienLlegados": true,
+      "publicado": true
     }
   ]
 }

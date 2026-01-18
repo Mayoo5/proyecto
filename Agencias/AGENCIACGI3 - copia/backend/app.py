@@ -335,6 +335,29 @@ def update_auto(auto_id):
     
     return jsonify({'error': 'Auto no encontrado'}), 404
 
+@app.route('/api/auto/<int:auto_id>/toggle-estado', methods=['PUT'])
+def toggle_auto_estado(auto_id):
+    """Cambia el estado publicado de un auto (true/false)"""
+    data = get_autos_data()
+    autos = data.get('autos_ejemplo', [])
+    
+    for i, auto in enumerate(autos):
+        if auto.get('id') == auto_id:
+            # Cambiar el estado publicado
+            auto['publicado'] = not auto.get('publicado', True)
+            
+            # Guardar cambios
+            data['autos_ejemplo'] = autos
+            save_autos_data(data)
+            
+            return jsonify({
+                'success': True,
+                'nuevo_estado': auto['publicado'],
+                'mensaje': f"Auto {'activado' if auto['publicado'] else 'pausado'} correctamente"
+            }), 200
+    
+    return jsonify({'error': 'Auto no encontrado'}), 404
+
 @app.route('/api/auto/<int:auto_id>', methods=['DELETE'])
 def delete_auto(auto_id):
     """Elimina un auto"""
